@@ -1,3 +1,2 @@
 "Open terminal"
-
-map <silent> <C-t> :FloatermNew<CR>
+map <silent> <C-t-`> :FloatermNew<CR>

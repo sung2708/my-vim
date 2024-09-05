@@ -1,4 +1,3 @@
-
 " _________                        __________ 
 " /   _____/ __ __   ____     ____  \______   \
 "\_____  \ |  |  \ /    \   / ___\  |     ___/
@@ -7,15 +6,17 @@
 "        \/             \/ /_____/             
 
 
-lua print("nvim has been started . . .")
+"lua print("nvim has been started . . .")
 
 " list plugin					       
 " using vim-plug (https://github.com/junegunn/vim-plug)  
 call plug#begin('~/vimfiles/plugged')
 
 " Theme
-"Plug 'navarasu/onedark.nvim'                   " One dark theme
+Plug 'navarasu/onedark.nvim'                   " One dark theme
 Plug 'dracula/vim', { 'as': 'dracula' }         " Dracula theme
+Plug 'ghifarit53/tokyonight-vim'                " Tokyo night theme
+Plug 'catppuccin/nvim', { 'as': 'catppuccin' }  "catppuccino theme
 
 " Folder
 Plug 'preservim/nerdtree'			            " File brower
@@ -26,8 +27,10 @@ Plug 'Xuyuanp/nerdtree-git-plugin'		        " Git status
 Plug 'ryanoasis/vim-devicons'
 
 " File search
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-Plug 'junegunn/fzf.vim'
+"Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+"Plug 'junegunn/fzf.vim'
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.8' }
 
 " Status bar
 Plug 'vim-airline/vim-airline'
@@ -37,7 +40,16 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'voldikss/vim-floaterm'
 
 " Code intellisense
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
+"Plug 'neoclide/coc.nvim', {'branch': 'release'}
+"Plug 'dense-analysis/ale'
+"Plug 'sheerun/vim-polyglot'
+
+"Plug 'neovim/nvim-lspconfig'
+
+
+" Notification
+Plug 'rcarriga/nvim-notify'
+
 
 call plug#end()
 
@@ -123,6 +135,9 @@ set wildmenu
 " Set theme 
 colorscheme dracula
 "colorscheme onedark
+"colorscheme tokyonight
+"colorscheme catppuccin
+
 
 "let $PATH = "C:/Program Files/Git/bin"
 

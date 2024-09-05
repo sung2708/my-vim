@@ -28,3 +28,4 @@ let g:nerdtree_sync_cursorline = 1
 if has('win32')
     autocmd BufEnter * lcd %:p:h
 endif
+
