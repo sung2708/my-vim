@@ -1,4 +1,3 @@
-" _________                        __________ 
 " /   _____/ __ __   ____     ____  \______   \
 "\_____  \ |  |  \ /    \   / ___\  |     ___/
 " /        \|  |  /|   |  \ / /_/  > |    |    
@@ -38,14 +37,19 @@ Plug 'vim-airline/vim-airline-themes'
 
 " Terminal
 Plug 'voldikss/vim-floaterm'
-
 " Code intellisense
-"Plug 'neoclide/coc.nvim', {'branch': 'release'}
-"Plug 'dense-analysis/ale'
-"Plug 'sheerun/vim-polyglot'
 
-"Plug 'neovim/nvim-lspconfig'
+Plug 'neovim/nvim-lspconfig'
+"Plug 'hrsh7th/nvim-compe'
 
+" Completion
+Plug 'hrsh7th/nvim-cmp'
+Plug 'hrsh7th/cmp-nvim-lsp'       " Cầu nối giữa nvim-cmp và LSP
+Plug 'hrsh7th/cmp-buffer'         " Gợi ý từ buffer
+Plug 'hrsh7th/cmp-path'           " Gợi ý đường dẫn
+Plug 'hrsh7th/cmp-cmdline'        " Gợi ý cho dòng lệnh
+Plug 'hrsh7th/vim-vsnip'          " Plugin snippet
+Plug 'hrsh7th/cmp-vsnip'          " Cầu nối giữa nvim-cmp và vsnip
 
 " Notification
 Plug 'rcarriga/nvim-notify'
@@ -144,7 +148,6 @@ colorscheme dracula
 " Disable automatic comment in newline
 autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 
-let g:fzf_preview_window = ['right:50%:wrap']
 
 
 " Other setting
