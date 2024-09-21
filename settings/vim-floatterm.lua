@@ -1,19 +1,18 @@
-vim.g.floaterm_direction = 'float'        -- Floating terminal
+-- Floaterm configuration
+vim.g.floaterm_direction = 'float'
 vim.g.floaterm_float_opts = {
-  border = "rounded",                     -- Border style
-  width = 0.9,                            -- Width of the floating window
-  height = 0.9,                           -- Height of the floating window
-  winblend = 3,                           -- Transparency level
+    border = "rounded",
+    width = 0.9,
+    height = 0.9,
+    winblend = 3,
 }
 
 -- Key mappings
 local opts = { noremap = true, silent = true }
 
-local opts = { noremap = true, silent = true }
+vim.api.nvim_set_keymap('n', '<leader>t', '<cmd>FloatermNew<CR>', opts)  -- Open new floaterm
+vim.api.nvim_set_keymap('n', '<leader>g', '<cmd>FloatermToggle<CR>', opts) -- Toggle floaterm
+vim.api.nvim_set_keymap('n', '<leader>k', '<cmd>FloatermKill<CR>', opts)   -- Kill floaterm
 
--- Open new floaterm with <leader>t
-vim.api.nvim_set_keymap('n', '<leader>t', '<cmd>FloatermNew<CR>', opts)
--- Toggle floaterm with <leader>g
-vim.api.nvim_set_keymap('n', '<leader>g', '<cmd>FloatermToggle<CR>', opts)
--- Kill floaterm with <leader>k
-vim.api.nvim_set_keymap('n', '<leader>k', '<cmd>FloatermKill<CR>', opts)
+-- Key mappings for terminal mode
+vim.api.nvim_set_keymap('t', '<leader>g', [[<C-\><C-n>:FloatermToggle<CR>]], opts) -- Toggle floaterm in terminal
