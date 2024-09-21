@@ -1,103 +1,252 @@
--- Xác định thư mục cài đặt plugin dựa trên hệ điều hành
-local is_win = vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1
-vim.g.plug_dir = is_win and vim.fn.expand('plugged') or vim.fn.expand('~/.local/share/nvim/plugged')
+--     _______. __    __  .__   __.   _______ .______  
+--    /       ||  |  |  | |  \ |  |  /  _____||   _  \ 
+--   |   (----`|  |  |  | |   \|  | |  |  __  |  |_)  |
+--    \   \    |  |  |  | |  . `  | |  | |_ | |   ___/ 
+--.----)   |   |  `--'  | |  |\   | |  |__| | |  |     
+--|_______/     \______/  |__| \__|  \______| | _|     
 
--- Khởi tạo vim-plug để quản lý plugin
-vim.cmd('call plug#begin("' .. vim.g.plug_dir .. '")')
+-- Plugin installation
+local function ensure_packer()
+  local fn = vim.fn
+  local install_path = fn.stdpath('data') .. '/site/pack/packer/start/packer.nvim'
+  
+  if fn.empty(fn.glob(install_path)) > 0 then
+    fn.system({
+      'git', 'clone', '--depth', '1',
+      'https://github.com/wbthomason/packer.nvim',
+      install_path
+    })
+    print("Installing Packer... Restart Neovim after the installation.")
+    vim.cmd [[packadd packer.nvim]]
+    return true
+  end
+  return false
+end
 
--- Danh sách các plugin
-local plug = vim.fn['plug#']
+local packer_bootstrap = ensure_packer()
 
--- Theme plugins
-plug('navarasu/onedark.nvim')              -- One Dark theme
-plug('dracula/vim', { as = 'dracula' })    -- Dracula theme
-plug('ghifarit53/tokyonight-vim')          -- Tokyo Night theme
-plug('catppuccin/nvim', { as = 'catppuccin' }) -- Catppuccin theme
+-- Initialize Packer
+require('packer').startup(function(use)
+  use 'wbthomason/packer.nvim'  -- Ensure Packer can manage itself
 
--- Các plugin khác
-plug('preservim/nerdtree')                 -- Quản lý thư mục dạng tree
-plug('Xuyuanp/nerdtree-git-plugin')        -- Tích hợp Git với NERDTree
-plug('nvim-tree/nvim-web-devicons')        -- Biểu tượng tệp tin
+  -- Theme plugins
+  use { 'Mofiqul/dracula.nvim', event = 'VimEnter' }
+  use { 'navarasu/onedark.nvim', event = 'VimEnter' }
+  use { 'folke/tokyonight.nvim', event = 'VimEnter' }
+  use { 'catppuccin/nvim', as = 'catppuccin', event = 'VimEnter' }
+  use { 'scottmckendry/cyberdream.nvim', event = 'VimEnter' }
+  use { 'rebelot/kanagawa.nvim', event = 'VimEnter' }
+  use { 'sho-87/kanagawa-paper.nvim', event = 'VimEnter' }
+  use { 'sainnhe/sonokai', event = 'VimEnter' }
+  use { 'polirritmico/monokai-nightasty.nvim', event = 'VimEnter' }
+  use { 'kaiuri/nvim-juliana', event = 'VimEnter' }
 
-plug('nvim-lua/plenary.nvim')              -- Thư viện Lua cần thiết cho nhiều plugin
-plug('nvim-telescope/telescope.nvim', { branch = '0.1.x' }) -- Tìm kiếm file và nội dung
+  -- File explorer
+  use { 'preservim/nerdtree', cmd = 'NERDTreeToggle' }
+  use { 'Xuyuanp/nerdtree-git-plugin', after = 'nerdtree' }
+  use { 'ryanoasis/vim-devicons', after = 'nerdtree' }
+  use { 'unkiwii/vim-nerdtree-sync', after = 'nerdtree' }
+  use { 'jcharum/vim-nerdtree-syntax-highlight', branch = 'escape-keys', after = 'nerdtree' }
 
-plug('nvim-lualine/lualine.nvim')          -- Hiển thị status bar ở dưới cùng
+  -- File search
+  use { 'nvim-telescope/telescope.nvim', tag = '0.1.8', requires = { {'nvim-lua/plenary.nvim'} }, cmd = 'Telescope' }
 
-plug('voldikss/vim-floaterm')              -- Terminal nổi trong Neovim
+  -- Status bar
+  use { 'nvim-lualine/lualine.nvim', requires = { 'nvim-tree/nvim-web-devicons', opt = true }, event = 'BufWinEnter' }
 
-plug('neovim/nvim-lspconfig')              -- Cấu hình LSP cho nhiều ngôn ngữ
-plug('hrsh7th/nvim-cmp')                   -- Plugin hoàn thành mã
-plug('hrsh7th/cmp-nvim-lsp')               -- Tích hợp hoàn thành mã từ LSP
-plug('L3MON4D3/LuaSnip')                   -- Snippet plugin
-plug('saadparwaiz1/cmp_luasnip')           -- Hoàn thành mã dựa trên snippets
-plug('onsails/lspkind-nvim')
+  -- Terminal
+  use { 'voldikss/vim-floaterm', cmd = 'FloatermToggle' }
 
-plug('rcarriga/nvim-notify')               -- Plugin hiển thị thông báo
-plug('folke/noice.nvim')                   -- Cải thiện hiển thị thông báo, lệnh
-plug('MunifTanjim/nui.nvim')               -- Thư viện UI cho noice.nvim
+  -- Bufferline
+  use { 'akinsho/bufferline.nvim', tag = "*", event = 'BufWinEnter' }
 
-plug('nvim-treesitter/nvim-treesitter', { ['do'] = ':TSUpdate' }) -- Plugin cú pháp cây
-plug('nvim-treesitter/nvim-treesitter-textobjects')
+  -- Treesitter
+  use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' }
+  use { 'nvim-treesitter/nvim-treesitter-textobjects', after = 'nvim-treesitter' }
 
-plug('glepnir/dashboard-nvim')             -- Giao diện Dashboard khi mở Neovim
+  -- LSP Config and LSP Installer
+  use { 'neovim/nvim-lspconfig', event = 'BufRead' }
+  use { 'williamboman/mason.nvim', cmd = 'Mason' }
+  use { 'williamboman/mason-lspconfig.nvim', after = 'mason.nvim' }
 
-plug('windwp/nvim-autopairs')              -- Plugin tự động đóng ngoặc, dấu ngoặc kép
+  -- Autocompletion plugins
+  use { 'hrsh7th/nvim-cmp', event = 'InsertEnter' }
+  use { 'hrsh7th/cmp-nvim-lsp', after = 'nvim-cmp' }
+  use { 'hrsh7th/cmp-buffer', after = 'nvim-cmp' }
+  use { 'hrsh7th/cmp-path', after = 'nvim-cmp' }
+  use { 'hrsh7th/cmp-cmdline', after = 'nvim-cmp' }
+  use { 'saadparwaiz1/cmp_luasnip', after = 'nvim-cmp' }
 
-plug('akinsho/bufferline.nvim', { branch = 'main' }) -- Quản lý buffer theo tabs
+  -- Snippets plugin
+  use { 'L3MON4D3/LuaSnip', event = 'InsertEnter' }
+  use { 'rafamadriz/friendly-snippets', after = 'LuaSnip' }
 
-plug('folke/flash.nvim')                   -- Plugin tìm kiếm nhanh
+  -- Optional: Icons for autocompletion
+  use { 'onsails/lspkind-nvim', after = 'nvim-cmp' }
 
--- Kết thúc cấu hình plugin
-vim.cmd('call plug#end()')
+  -- Indentation guides plugin
+  use { 'lukas-reineke/indent-blankline.nvim', event = 'BufRead' }
 
--- Thiết lập theme sau khi cài đặt các plugin
-vim.cmd('colorscheme dracula')  -- Chọn giao diện dracula
+  -- Debugging plugin
+  use { 'mfussenegger/nvim-dap', event = 'BufRead' }
+  use { 'theHamsta/nvim-dap-virtual-text', after = 'nvim-dap' }
 
--- Các cài đặt chung cho Neovim
-vim.opt.number = true                      -- Hiển thị số dòng
-vim.opt.encoding = "UTF-8"                 -- Thiết lập mã hóa UTF-8
-vim.opt.shell = "pwsh"                     -- Thiết lập PowerShell làm shell mặc định
-vim.opt.shellcmdflag = "-command"          -- Lệnh shell flag cho PowerShell
-vim.opt.shellquote = "\""                  -- Thiết lập cách báo dấu nháy cho lệnh shell
-vim.opt.shellxquote = ""                   -- Không sử dụng dấu nháy cho shell lệnh bổ sung
+  if packer_bootstrap then
+    require('packer').sync()
+  end
+end)
 
-vim.opt.compatible = false                 -- Vô hiệu hoá chế độ tương thích với vi
-vim.opt.cursorline = true                  -- Làm nổi bật dòng chứa con trỏ
-vim.opt.cursorcolumn = true                -- Làm nổi bật cột chứa con trỏ
-vim.opt.shiftwidth = 4                     -- Kích thước thụt dòng
-vim.opt.tabstop = 4                        -- Kích thước tab là 4 ký tự
-vim.opt.expandtab = true                   -- Thay thế tab bằng khoảng trắng
-vim.opt.backup = false                     -- Tắt tạo file backup
+-- Function to load all Lua configuration files from the settings folder
+local function load_plugin_configs()
+  local current_dir = vim.fn.getcwd()
+  local settings_dir = current_dir .. '/settings/'
+  local files = vim.fn.glob(settings_dir .. '*.lua')
 
--- Cài đặt cuộn trang
-vim.opt.scrolloff = 10                     -- Giữ 10 dòng trên và dưới con trỏ khi cuộn trang
+  for _, file in ipairs(vim.fn.split(files, '\n')) do
+    local filename = file:match("([^/\\]+)%.lua$")
+    if filename then
+      require('settings.' .. filename)
+    end
+  end
+end
 
--- Cài đặt tìm kiếm
-vim.opt.wrap = false                       -- Vô hiệu hoá tự động ngắt dòng
-vim.opt.incsearch = true                   -- Tìm kiếm theo từng ký tự nhập
-vim.opt.ignorecase = true                  -- Tìm kiếm không phân biệt chữ hoa/thường
-vim.opt.smartcase = true                   -- Phân biệt chữ hoa/thường khi có chữ hoa trong từ khóa
+-- Load all plugin configurations
+load_plugin_configs()
 
--- Cài đặt hiển thị dòng lệnh và bộ nhớ lệnh
-vim.opt.showcmd = true                     -- Hiển thị lệnh đang nhập
-vim.opt.showmode = true                    -- Hiển thị chế độ hiện tại (insert, normal, ...)
-vim.opt.showmatch = true                   -- Hiển thị cặp ngoặc khi đặt con trỏ
-vim.opt.history = 1000                     -- Lưu lịch sử 1000 lệnh
-vim.opt.wildmenu = true                    -- Hiển thị menu khi gõ lệnh không hoàn chỉnh
-vim.opt.termguicolors = true               -- Bật màu sắc giao diện 24-bit
+-- Filetype configuration
+vim.cmd("filetype on")
+vim.cmd("filetype plugin on")
+vim.cmd("filetype indent on")
 
--- Vô hiệu hoá tự động thêm comment khi xuống dòng mới
+-- Encoding settings
+vim.opt.encoding = "utf-8"
+vim.opt.fileencoding = "utf-8"
+
+-- UI settings
+vim.opt.number = true
+vim.opt.cursorline = true
+vim.opt.cursorcolumn = true
+vim.opt.syntax = "on"
+vim.opt.termguicolors = true
+
+-- Disable CursorLine and CursorColumn in NERDTree
+vim.api.nvim_create_autocmd("FileType", {
+    pattern = "nerdtree",
+    callback = function()
+        vim.opt.cursorline = true
+        vim.opt.cursorcolumn = false
+    end
+})
+
+-- Re-enable CursorLine and CursorColumn when leaving NERDTree
+vim.api.nvim_create_autocmd("BufLeave", {
+    pattern = "*",
+    callback = function()
+        if vim.bo.filetype ~= "nerdtree" then
+            vim.opt.cursorline = true
+            vim.opt.cursorcolumn = true
+        end
+    end
+})
+
+-- Optional: Set cursor color if you're using a terminal that supports it
+vim.cmd("highlight Normal guibg=NONE")
+
+-- Indentation and tab settings
+vim.opt.shiftwidth = 4
+vim.opt.tabstop = 4
+vim.opt.expandtab = true
+vim.opt.smartindent = true
+vim.opt.autoindent = false
+
+-- Search settings
+vim.opt.incsearch = true
+vim.opt.ignorecase = true
+vim.opt.smartcase = true
+
+-- Display settings
+vim.opt.scrolloff = 10
+vim.opt.wrap = false
+vim.opt.showmode = true
+vim.opt.showcmd = true
+vim.opt.showmatch = true
+vim.opt.hlsearch = true
+
+-- History and shell settings
+vim.opt.history = 10
+vim.opt.backup = false
+vim.opt.shell = "pwsh"
+vim.opt.shellcmdflag = "-command"
+vim.opt.shellxquote = ""
+
+-- Configure display characters for special components
+vim.opt.listchars = {
+  space = ".",
+  tab = "->",
+}
+
+-- Automatically check for external changes
+vim.api.nvim_create_autocmd({"CursorHold", "CursorHoldI"}, {
+  pattern = "*",
+  command = "checktime",
+})
+
+vim.api.nvim_create_autocmd({"FocusGained", "BufEnter"}, {
+  pattern = "*",
+  command = "checktime",
+})
+
+vim.api.nvim_create_autocmd({"FocusGained", "BufEnter", "CursorHold", "CursorHoldI"}, {
+  pattern = "*",
+  callback = function()
+    if vim.fn.mode() ~= "c" and vim.fn.mode() ~= "r" and vim.fn.mode():sub(1, 1) ~= "!" and vim.fn.mode():sub(1, 1) ~= "t" and vim.fn.getcmdwintype() == "" then
+      vim.cmd("checktime")
+    end
+  end,
+})
+
+vim.api.nvim_create_autocmd("FileChangedShellPost", {
+  pattern = "*",
+  callback = function()
+    vim.api.nvim_echo({{"File changed on disk. Buffer reloaded.", "WarningMsg"}}, false, {})
+  end,
+})
+
+-- Enable copying from Neovim to clipboard
+if vim.fn.has('win32') == 1 then
+  vim.opt.clipboard = "unnamed"
+else
+  vim.opt.clipboard = "unnamedplus"
+end
+
+-- Display special characters like eol, tab, space, etc.
+vim.opt.list = true
+
+-- Auto commands
 vim.api.nvim_create_autocmd("FileType", {
   pattern = "*",
   command = "setlocal formatoptions-=c formatoptions-=r formatoptions-=o"
 })
 
--- Vô hiệu hoá nhà cung cấp perl không cần thiết
-vim.g.loaded_perl_provider = 0
+-- Themes settings
+-- Set a default colorscheme
+local default_colorscheme = "dracula"
 
--- Nguồn các tệp Lua bổ sung từ thư mục 'settings'
-local config_path = vim.fn.stdpath('config') .. '/settings/'
-for _, setting_file in ipairs(vim.fn.globpath(config_path, '*.lua', true, true)) do
-  vim.cmd('source ' .. setting_file)
+-- Function to set colorscheme
+local function set_colorscheme(scheme)
+    vim.cmd("colorscheme " .. scheme)
 end
+
+-- Set the default colorscheme on startup
+set_colorscheme(default_colorscheme)
+
+-- Define a command to change colorscheme and update default
+vim.api.nvim_create_user_command("Colorscheme", function(opts)
+    local new_scheme = opts.args
+    if new_scheme and new_scheme ~= "" then
+        set_colorscheme(new_scheme)
+        default_colorscheme = new_scheme  -- Update the default colorscheme
+    else
+        print("Please provide a colorscheme name.")
+    end
+end, { nargs = 1 })

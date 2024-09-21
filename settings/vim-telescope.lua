@@ -1,40 +1,48 @@
--- Cấu hình Telescope
-require('telescope').setup({
-  defaults = {
-    prompt_prefix = "> ",
-    selection_caret = "> ",
-    entry_prefix = "  ",
-    initial_mode = "insert",
-    sorting_strategy = "ascending",
-    layout_strategy = "horizontal",
-    layout_config = {
-      horizontal = {
-        mirror = false,
-        preview_width = 0.7, -- Cửa sổ preview chiếm 70% chiều rộng
-        width = 0.8,
-        height = 0.4,
-      },
-      vertical = {
-        mirror = false,
-      },
-    },
-    file_sorter = require('telescope.sorters').get_fuzzy_file,
-    generic_sorter = require('telescope.sorters').get_generic_fuzzy_sorter,
-    winblend = 0,
-    border = {},
-    borderchars = { '─', '│', '─', '│', '┌', '┐', '┘', '└' },
-    color_devicons = true,
-    use_less = true,
-    set_env = { ['COLORTERM'] = 'truecolor' },
-    -- Extensions configuration
-  },
-  extensions = {
-    -- Extension configurations
-  }
-})
+local builtin = require('telescope.builtin')
 
--- Phím tắt cho Telescope
-vim.api.nvim_set_keymap('n', '<leader>ff', '<cmd>Telescope find_files<cr>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>fg', '<cmd>Telescope live_grep<cr>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>fb', '<cmd>Telescope buffers<cr>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>fh', '<cmd>Telescope help_tags<cr>', { noremap = true, silent = true })
+-- Set Telescope defaults
+require('telescope').setup {
+  defaults = {
+    layout_config = {
+      horizontal = {  -- Configure horizontal layout
+        preview_width = 0.7,  -- Preview window width (70% of the horizontal space)
+        width = 0.8,          -- Total width for Telescope (90% of the window)
+        height = 0.7,         -- Optional: total height (90% of the window)
+      },
+      prompt_position = "top",  -- Position the prompt at the top
+    },
+  },
+}
+
+-- Key mappings for Telescope
+vim.keymap.set('n', '<leader>ff', function()
+  builtin.find_files({
+    layout_config = {
+      width = 0.8,  -- Total width for the find files selection (90%)
+    },
+  })
+end, { desc = 'Telescope find files' })
+
+vim.keymap.set('n', '<leader>fg', function()
+  builtin.live_grep({
+    layout_config = {
+      width = 0.8,  -- Total width for the live grep selection (90%)
+    },
+  })
+end, { desc = 'Telescope live grep' })
+
+vim.keymap.set('n', '<leader>fb', function()
+  builtin.buffers({
+    layout_config = {
+      width = 0.8,  -- Total width for the buffers selection (90%)
+    },
+  })
+end, { desc = 'Telescope buffers' })
+
+vim.keymap.set('n', '<leader>fh', function()
+  builtin.help_tags({
+    layout_config = {
+      width = 0.8,  -- Total width for the help tags selection (90%)
+    },
+  })
+end, { desc = 'Telescope help tags' })

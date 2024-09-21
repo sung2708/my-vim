@@ -1,33 +1,13 @@
--- Cài đặt lspkind
-require('lspkind').init({
-  -- Các tùy chọn cấu hình
-  mode = 'symbol', -- Thay thế các tùy chọn lỗi thời bằng `mode`
-  preset = 'default',
-  symbol_map = {
-    Text = "",
-    Method = "m",
-    Function = "",
-    Constructor = "",
-    Field = "識",
-    Variable = "",
-    Class = "ﴯ",
-    Interface = "ﰮ",
-    Module = "",
-    Property = "",
-    Unit = "塞",
-    Value = "",
-    Enum = "",
-    Keyword = "",
-    Snippet = "﬌",
-    Color = "",
-    File = "",
-    Reference = "",
-    Folder = "",
-    EnumMember = "",
-    Constant = "",
-    Struct = "פּ",
-    Event = "🗲",
-    Operator = "",
-    TypeParameter = "",
-  },
-})
+-- Import nvim-cmp and lspkind
+local cmp = require('cmp')
+local lspkind = require('lspkind')
+
+-- Configure nvim-cmp formatting using lspkind
+cmp.setup {
+  formatting = {
+    format = lspkind.cmp_format({
+      mode = 'symbol', -- Display icon and type in suggestions
+      maxwidth = 50,   -- Limit the width of the suggestion text
+    })
+  }
+}

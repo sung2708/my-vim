@@ -1,52 +1,42 @@
--- vim-cmp.lua
-
--- Đảm bảo rằng tất cả các module đều được nạp
 local cmp = require('cmp')
-local lspkind = require('lspkind')
-local luasnip = require('luasnip')
-local cmp_nvim_lsp = require('cmp_nvim_lsp')
-local lspconfig = require('lspconfig')
 
--- Cấu hình nvim-cmp
+-- Setup nvim-cmp for completion
 cmp.setup({
   snippet = {
+    -- Use luasnip to expand snippets
     expand = function(args)
-      luasnip.lsp_expand(args.body) -- Sử dụng luasnip để mở rộng snippet
+      require('luasnip').lsp_expand(args.body) -- Expand snippets with luasnip
     end,
   },
-  mapping = cmp.mapping.preset.insert({
-    ['<C-n>'] = cmp.mapping.select_next_item(),
-    ['<C-p>'] = cmp.mapping.select_prev_item(),
-    ['<C-y>'] = cmp.mapping.confirm({ select = true }), -- Xác nhận lựa chọn
-    ['<C-e>'] = cmp.mapping.abort(), -- Hủy bỏ hoàn thành
-  }),
-  sources = {
-    { name = 'nvim_lsp' },  -- LSP source
-    { name = 'luasnip' },   -- Snippet source
-    { name = 'buffer' },    -- Buffer source
-    { name = 'path' },      -- Path source
+  mapping = {
+    ['<C-b>'] = cmp.mapping.scroll_docs(-4),          -- Scroll documentation up
+    ['<C-f>'] = cmp.mapping.scroll_docs(4),           -- Scroll documentation down
+    ['<C-Space>'] = cmp.mapping.complete(),            -- Trigger completion
+    ['<C-e>'] = cmp.mapping.abort(),                   -- Abort completion
+    ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Confirm selection on Enter
   },
-  formatting = {
-    format = lspkind.cmp_format({
-      with_text = true, -- Hiển thị văn bản và biểu tượng
-      menu = ({
-        buffer = "[Buffer]",
-        nvim_lsp = "[LSP]",
-        luasnip = "[Snip]",
-        path = "[Path]",
-      })
-    })
-  },
+  sources = cmp.config.sources({
+    { name = 'nvim_lsp' },  -- LSP completion source
+    { name = 'luasnip' },   -- Snippets source
+  }, {
+    { name = 'buffer' },    -- Buffer completion source
+  })
 })
 
--- Cấu hình khả năng của LSP
-local capabilities = cmp_nvim_lsp.default_capabilities()
+-- Setup for '/' command-line completion (search mode)
+cmp.setup.cmdline('/', {
+  mapping = cmp.mapping.preset.cmdline(),
+  sources = {
+    { name = 'buffer' } -- Use buffer source for '/'
+  }
+})
 
--- Cấu hình các máy chủ LSP
-local servers = { 'pyright', 'tsserver', 'html', 'cssls', 'clangd', 'gopls' }
-
-for _, lsp in ipairs(servers) do
-  lspconfig[lsp].setup({
-    capabilities = capabilities,
+-- Setup for ':' command-line completion
+cmp.setup.cmdline(':', {
+  mapping = cmp.mapping.preset.cmdline(),
+  sources = cmp.config.sources({
+    { name = 'path' },    -- Path completion source
+  }, {
+    { name = 'cmdline' }  -- Command-line completion source
   })
-end
+})
