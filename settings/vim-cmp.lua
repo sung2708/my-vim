@@ -1,11 +1,20 @@
-local cmp = require('cmp')
+local ok, cmp = pcall(require, 'cmp')
+if not ok then
+  print("Error loading nvim-cmp")
+  return
+end
 
 -- Setup nvim-cmp for completion
 cmp.setup({
   snippet = {
     -- Use luasnip to expand snippets
     expand = function(args)
-      require('luasnip').lsp_expand(args.body) -- Expand snippets with luasnip
+      local luasnip_ok, luasnip = pcall(require, 'luasnip')
+      if luasnip_ok then
+        luasnip.lsp_expand(args.body) -- Expand snippets with luasnip
+      else
+        print("Error loading luasnip")
+      end
     end,
   },
   mapping = {
@@ -36,7 +45,6 @@ cmp.setup.cmdline(':', {
   mapping = cmp.mapping.preset.cmdline(),
   sources = cmp.config.sources({
     { name = 'path' },    -- Path completion source
-  }, {
     { name = 'cmdline' }  -- Command-line completion source
   })
 })

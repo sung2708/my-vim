@@ -17,7 +17,7 @@ require("bufferline").setup {
         middle_mouse_command = nil,
         indicator = {
             icon = '▎',  -- This should be omitted if indicator style is not 'icon'
-            style = 'icon'  -- Options: 'icon', 'underline', 'none'
+            style = 'underline'  -- Options: 'icon', 'underline', 'none'
         },
         buffer_close_icon = '󰅖',
         modified_icon = '● ',

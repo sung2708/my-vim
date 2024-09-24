@@ -11,7 +11,7 @@ dap.adapters.cppdbg = {
     type = 'server',
     port = 13000, -- Adjust as necessary
     executable = {
-        command = 'path/to/codelldb', -- Path to the codelldb executable
+        command = vim.fn.expand('~/.local/share/nvim/mason/bin/codelldb'), -- Adjust this path if necessary
         args = { '--port', '13000' }
     }
 }
@@ -20,6 +20,12 @@ dap.adapters.typescript = {
     type = 'server',
     host = '127.0.0.1',
     port = 9229,  -- The port for the TypeScript debugger
+}
+
+dap.adapters.go = {
+    type = 'server',
+    host = '127.0.0.1',
+    port = 8080,  -- Adjust as necessary for Delve
 }
 
 -- Configuration for Python
@@ -65,6 +71,17 @@ dap.configurations.typescript = {
         cwd = "${workspaceFolder}",
         runtimeArgs = { "--inspect-brk" },
         protocol = "inspector",
+    },
+}
+
+-- Configuration for Go
+dap.configurations.go = {
+    {
+        name = "Launch Go file",
+        type = "go",
+        request = "launch",
+        program = "${file}",  -- The currently opened file
+        cwd = "${workspaceFolder}",
     },
 }
 
