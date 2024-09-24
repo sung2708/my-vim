@@ -1,6 +1,5 @@
 vim.opt.termguicolors = true
 local current_folder = vim.fn.fnamemodify(vim.fn.getcwd(), ":t")  -- Get the current folder name
-
 current_folder = string.upper(current_folder)  -- Convert folder name to uppercase
 
 require("bufferline").setup {
@@ -44,6 +43,11 @@ require("bufferline").setup {
             return s
         end,
         custom_filter = function(buf_number, buf_numbers)
+            -- Disable cursorline and cursorcolumn for the bufferline
+            if vim.bo[buf_number].filetype == "bufferline" then
+                vim.wo.cursorline = false
+                vim.wo.cursorcolumn = false
+            end
             return true  -- Add filtering logic if needed
         end,
         offsets = {

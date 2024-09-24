@@ -1,7 +1,7 @@
-" Optimize 
-set synmaxcol=3000    "Prevent breaking syntax hightlight when string too long. Max = 3000"
+" Optimize settings
+set synmaxcol=3000                " Prevent breaking syntax highlight for long strings
 set lazyredraw
-au! BufNewFile,BufRead *.json set foldmethod=indent " Change foldmethod for specific filetype
+au BufNewFile,BufRead *.json set foldmethod=indent  " Change foldmethod for specific filetype
 
 " Specify the directory for plugins
 call plug#begin('~/AppData/Local/nvim/plugged')
@@ -18,7 +18,7 @@ Plug 'sainnhe/sonokai'
 Plug 'polirritmico/monokai-nightasty.nvim'
 Plug 'kaiuri/nvim-juliana'
 
-" File explorer
+" File explorer and related plugins
 Plug 'preservim/nerdtree'
 Plug 'Xuyuanp/nerdtree-git-plugin'
 
@@ -33,7 +33,7 @@ Plug 'nvim-tree/nvim-web-devicons'
 " Terminal
 Plug 'voldikss/vim-floaterm'
 
-" Bufferline with configuration
+" Bufferline
 Plug 'akinsho/bufferline.nvim'
 
 " Treesitter and its text objects
@@ -67,13 +67,11 @@ call plug#end()
 
 " Load Lua configurations from the settings directory
 function! LoadPluginConfigs()
-    let settings_dir = stdpath('config') . '/settings/'
-    let files = glob(settings_dir . '*.lua')
+    let files = glob(stdpath('config') . '/settings/*.lua')
     for file in split(files, '\n')
         execute 'luafile' file
     endfor
 endfunction
-
 call LoadPluginConfigs()
 
 " Filetype configuration
@@ -87,17 +85,11 @@ set fileencoding=utf-8
 
 " UI settings
 set number
-set cursorline
-set cursorcolumn
 set showmode
 syntax on
 set termguicolors
 
-augroup NERDTreeSettings
-    autocmd!
-    autocmd BufEnter * if &ft ==# 'nerdtree' | setlocal nocursorcolumn | endif
-augroup END
-
+" Disable cursorline and cursorcolumn in bufferline
 augroup BufferlineSettings
     autocmd!
     autocmd FileType bufferline setlocal nocursorline nocursorcolumn
@@ -139,8 +131,8 @@ set clipboard=unnamedplus
 " Set a default colorscheme
 colorscheme tokyonight
 
-" Auto command
+" Auto command to reload vimrc automatically on save
 augroup reload_vimrc
     autocmd!
-    autocmd BufWritePost $MYVIMRC source $MYVIMRC
+    autocmd BufWritePost $MYVIMRC source $MYVIMRC | redraw!
 augroup END
