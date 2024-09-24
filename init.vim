@@ -3,8 +3,14 @@ set synmaxcol=3000                " Prevent breaking syntax highlight for long s
 set lazyredraw
 au BufNewFile,BufRead *.json set foldmethod=indent  " Change foldmethod for specific filetype
 
-" Specify the directory for plugins
-call plug#begin('~/AppData/Local/nvim/plugged')
+" Detect the OS for plugin directory
+if has('win32') || has('win64')
+    let s:plug_dir = '~/AppData/Local/nvim/plugged'
+else
+    let s:plug_dir = stdpath('config') . '/plugged'
+endif
+
+call plug#begin(s:plug_dir)
 
 " Theme plugins
 Plug 'Mofiqul/dracula.nvim'
@@ -21,6 +27,7 @@ Plug 'kaiuri/nvim-juliana'
 " File explorer and related plugins
 Plug 'preservim/nerdtree'
 Plug 'Xuyuanp/nerdtree-git-plugin'
+Plug 'ryanoasis/vim-devicons'
 
 " File search (Telescope)
 Plug 'nvim-lua/plenary.nvim'
@@ -28,7 +35,6 @@ Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.8' }
 
 " Status bar
 Plug 'nvim-lualine/lualine.nvim'
-Plug 'nvim-tree/nvim-web-devicons'
 
 " Terminal
 Plug 'voldikss/vim-floaterm'
@@ -86,13 +92,22 @@ set fileencoding=utf-8
 " UI settings
 set number
 set showmode
+set cursorline
+set cursorcolumn
 syntax on
 set termguicolors
 
-" Disable cursorline and cursorcolumn in bufferline
-augroup BufferlineSettings
+" Disable cursorline and cursorcolumn for all buffers handled by bufferline
+augroup DisableCursorInBufferline
     autocmd!
-    autocmd FileType bufferline setlocal nocursorline nocursorcolumn
+    autocmd BufEnter * setlocal nocursorline nocursorcolumn
+augroup END
+
+" Disable cursorline and cursorcolumn in NERDTree
+augroup NERDTreeSettings
+    autocmd!
+    autocmd BufEnter * if &filetype ==# 'nerdtree' | setlocal cursorline | endif
+    autocmd BufLeave * if &filetype ==# 'nerdtree' | setlocal cursorline cursorcolumn | endif
 augroup END
 
 " History and shell settings
@@ -117,7 +132,10 @@ set smartcase
 set scrolloff=10
 set nowrap
 set hlsearch
-set listchars=space:.,tab:->
+
+" Enable the display of list characters
+set list
+set listchars=space:.,tab:-> 
 
 " Automatically check for external changes
 augroup check_time
@@ -130,9 +148,3 @@ set clipboard=unnamedplus
 
 " Set a default colorscheme
 colorscheme tokyonight
-
-" Auto command to reload vimrc automatically on save
-augroup reload_vimrc
-    autocmd!
-    autocmd BufWritePost $MYVIMRC source $MYVIMRC | redraw!
-augroup END
