@@ -4,7 +4,13 @@ set lazyredraw
 au BufNewFile,BufRead *.json set foldmethod=indent  " Change foldmethod for specific filetype
 
 " Specify the directory for plugins
-call plug#begin('~/AppData/Local/nvim/plugged')
+if has('win32') || has('win64')
+    let s:plug_dir = '~/AppData/Local/nvim/plugged'
+else
+    let s:plug_dir = stdpath('config') . '/plugged'
+endif
+
+call plug#begin(s:plug_dir)
 
 " Theme plugins
 Plug 'Mofiqul/dracula.nvim'
