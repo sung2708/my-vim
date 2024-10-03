@@ -16,3 +16,4 @@ vim.api.nvim_set_keymap('n', '<leader>k', '<cmd>FloatermKill<CR>', opts)   -- Ki
 
 -- Key mappings for terminal mode
 vim.api.nvim_set_keymap('t', '<leader>g', [[<C-\><C-n>:FloatermToggle<CR>]], opts) -- Toggle floaterm in terminal
+vim.api.nvim_set_keymap('t', '<leader>k', [[<C-\><C-n>:FloatermKill<CR>]], opts)

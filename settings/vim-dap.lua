@@ -1,31 +1,30 @@
 local dap = require('dap')
 
 -- DAP Adapter configurations
-dap.adapters.python = {
-    type = 'server',
-    host = '127.0.0.1',
-    port = 5678,  -- The port for debugpy
-}
-
-dap.adapters.cppdbg = {
-    type = 'server',
-    port = 13000, -- Adjust as necessary
-    executable = {
-        command = vim.fn.expand('~/.local/share/nvim/mason/bin/codelldb'), -- Adjust this path if necessary
-        args = { '--port', '13000' }
-    }
-}
-
-dap.adapters.typescript = {
-    type = 'server',
-    host = '127.0.0.1',
-    port = 9229,  -- The port for the TypeScript debugger
-}
-
-dap.adapters.go = {
-    type = 'server',
-    host = '127.0.0.1',
-    port = 8080,  -- Adjust as necessary for Delve
+dap.adapters = {
+    python = {
+        type = 'server',
+        host = '127.0.0.1',
+        port = 5678,  -- The port for debugpy
+    },
+    cppdbg = {
+        type = 'server',
+        port = 13000,  -- Adjust as necessary
+        executable = {
+            command = vim.fn.expand('~/.local/share/nvim/mason/bin/codelldb'),  -- Adjust this path if necessary
+            args = { '--port', '13000' }
+        }
+    },
+    typescript = {
+        type = 'server',
+        host = '127.0.0.1',
+        port = 9229,  -- The port for the TypeScript debugger
+    },
+    go = {
+        type = 'server',
+        host = '127.0.0.1',
+        port = 8080,  -- Adjust as necessary for Delve
+    },
 }
 
 -- Configuration for Python
@@ -47,7 +46,7 @@ dap.configurations.cpp = {
         name = "Launch C/C++",
         type = "cppdbg",
         request = "launch",
-        program = "${workspaceFolder}/bin/${workspaceFolderBasename}", -- Adjust the output path
+        program = "${workspaceFolder}/bin/${workspaceFolderBasename}",  -- Adjust the output path
         cwd = "${workspaceFolder}",
         stopAtEntry = false,
         runInTerminal = false,
@@ -86,11 +85,15 @@ dap.configurations.go = {
 }
 
 -- Key mappings for DAP
-vim.api.nvim_set_keymap('n', '<F5>', "<cmd>lua require'dap'.continue()<CR>", { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<F10>', "<cmd>lua require'dap'.step_over()<CR>", { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<F11>', "<cmd>lua require'dap'.step_into()<CR>", { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<F12>', "<cmd>lua require'dap'.step_out()<CR>", { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<Leader>b', "<cmd>lua require'dap'.toggle_breakpoint()<CR>", { noremap = true, silent = true })
+local function set_keymap(key, command)
+    vim.api.nvim_set_keymap('n', key, command, { noremap = true, silent = true })
+end
 
--- Optional: Set up virtual text
+set_keymap('<F5>', "<cmd>lua require'dap'.continue()<CR>")
+set_keymap('<F10>', "<cmd>lua require'dap'.step_over()<CR>")
+set_keymap('<F11>', "<cmd>lua require'dap'.step_into()<CR>")
+set_keymap('<F12>', "<cmd>lua require'dap'.step_out()<CR>")
+set_keymap('<Leader>b', "<cmd>lua require'dap'.toggle_breakpoint()<CR>")
+
+-- Optional: Set up virtual text for DAP
 require('nvim-dap-virtual-text').setup()
