@@ -14,35 +14,38 @@ require('telescope').setup {
   },
 }
 
--- Key mappings for Telescope
+-- Local options for key mappings
+local opts = { noremap = true, silent = true }
+
+-- Telescope key mappings
 vim.keymap.set('n', '<leader>ff', function()
   builtin.find_files({
     layout_config = {
-      width = 0.8,  -- Total width for the find files selection (90%)
+      width = 0.8,
     },
   })
-end, { desc = 'Telescope find files' })
+end, vim.tbl_extend('force', opts, { desc = 'Telescope find files' }))
 
 vim.keymap.set('n', '<leader>fg', function()
   builtin.live_grep({
     layout_config = {
-      width = 0.8,  -- Total width for the live grep selection (90%)
+      width = 0.8,
     },
   })
-end, { desc = 'Telescope live grep' })
+end, vim.tbl_extend('force', opts, { desc = 'Telescope live grep' }))
 
 vim.keymap.set('n', '<leader>fb', function()
   builtin.buffers({
     layout_config = {
-      width = 0.8,  -- Total width for the buffers selection (90%)
+      width = 0.8,
     },
   })
-end, { desc = 'Telescope buffers' })
+end, vim.tbl_extend('force', opts, { desc = 'Telescope buffers' }))
 
 vim.keymap.set('n', '<leader>fh', function()
   builtin.help_tags({
     layout_config = {
-      width = 0.8,  -- Total width for the help tags selection (90%)
+      width = 0.8,
     },
   })
-end, { desc = 'Telescope help tags' })
+end, vim.tbl_extend('force', opts, { desc = 'Telescope help tags' }))

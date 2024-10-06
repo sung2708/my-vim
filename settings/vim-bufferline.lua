@@ -87,13 +87,16 @@ require("bufferline").setup {
 }
 
 -- Key mappings for Bufferline
-local opts = { noremap = true, silent = false }
+local opts = { noremap = true, silent = true }
 
-vim.api.nvim_set_keymap('n', '<leader>bn', ':enew<CR>', opts) -- Mở một buffer mới
-vim.api.nvim_set_keymap('n', '<leader>bp', ':BufferLineTogglePin<CR>', opts) -- Chuyển đổi pin buffer hiện tại
-vim.api.nvim_set_keymap('n', '<leader>]', ':BufferLineCycleNext<CR>', opts) -- Đi tới buffer tiếp theo
-vim.api.nvim_set_keymap('n', '<leader>[', ':BufferLineCyclePrev<CR>', opts) -- Đi tới buffer trước đó
-vim.api.nvim_set_keymap('n', '<leader>bc', ':bdelete<CR>', opts) -- Đóng buffer hiện tại
-vim.api.nvim_set_keymap('n', '<leader>bl', ':BufferLineMoveNext<CR>', opts) -- Di chuyển buffer sang phải
-vim.api.nvim_set_keymap('n', '<leader>bh', ':BufferLineMovePrev<CR>', opts) -- Di chuyển buffer sang trái
+vim.api.nvim_set_keymap('n', '<leader>bn', ':enew<CR>', opts) -- Open a new buffer
+vim.api.nvim_set_keymap('n', '<leader>bp', ':BufferLineTogglePin<CR>', opts) -- Pin buffer
+vim.api.nvim_set_keymap('n', '<leader>]', ':BufferLineCycleNext<CR>', opts) -- Go to next buffer
+vim.api.nvim_set_keymap('n', '<leader>[', ':BufferLineCyclePrev<CR>', opts) -- Go to previous buffer
+vim.api.nvim_set_keymap('n', '<leader>bd', ':bdelete | BufferLineCyclePrev<CR>', opts) -- Close buffer safely
+vim.api.nvim_set_keymap('n', '<leader>bl', ':BufferLineMoveNext<CR>', opts) -- Move buffer to the right
+vim.api.nvim_set_keymap('n', '<leader>bh', ':BufferLineMovePrev<CR>', opts) -- Move buffer to the left
 
+-- Key mapping to open a file in a new tab while keeping the current buffer open
+vim.api.nvim_set_keymap('n', '<leader>to', ':tabedit %<CR>', opts) -- Open current buffer in a new tab
+vim.api.nvim_set_keymap('n', '<leader>tt', ':tabnew<CR>', opts) -- Open an empty new tab

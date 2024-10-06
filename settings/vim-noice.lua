@@ -8,13 +8,13 @@ require("noice").setup({
       position = { row = 10, col = 0.5 }, -- Center cmdline vertically
     },
     format = {
-      cmdline = { pattern = "^:", icon = "", lang = "vim" }, -- Default command-line mode
-      search_down = { kind = "search", pattern = "^/", icon = " ", lang = "regex" }, -- Search down with /
-      search_up = { kind = "search", pattern = "^%?", icon = " ", lang = "regex" }, -- Search up with ?
-      filter = { pattern = "^:%s*!", icon = "$", lang = "bash" }, -- Shell commands with !
-      lua = { pattern = { "^:%s*lua%s+", "^:%s*lua%s*=%s*", "^:%s*=%s*" }, icon = "", lang = "lua" }, -- Lua execution
-      help = { pattern = "^:%s*he?l?p?%s+", icon = "" }, -- Help commands
-      input = { view = "cmdline_input", icon = "󰥻 " }, -- For input() method
+      cmdline = { pattern = "^:", icon = ">", lang = "vim" }, -- Default command-line mode
+      search_down = { kind = "search", pattern = "^/", icon = "↓", lang = "regex" }, -- Search down with /
+      search_up = { kind = "search", pattern = "^%?", icon = "↑", lang = "regex" }, -- Search up with ?
+      filter = { pattern = "^:%s*!", icon = "!", lang = "bash" }, -- Shell commands with !
+      lua = { pattern = { "^:%s*lua%s+", "^:%s*lua%s*=%s*", "^:%s*=%s*" }, icon = "🌙", lang = "lua" }, -- Lua execution
+      help = { pattern = "^:%s*he?l?p?%s+", icon = "?", lang = "help" }, -- Help commands
+      input = { view = "cmdline_input", icon = "✏️" }, -- For input() method
     },
   },
 

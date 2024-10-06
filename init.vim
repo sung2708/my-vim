@@ -29,11 +29,13 @@ set shellcmdflag=-command          " Set flag for command execution in the shell
 set shellxquote=                   " Set quoting for the shell
 
 " Disable cursorline and cursorcolumn for specific buffers (NERDTree)
+autocmd FileType nerdtree setlocal cursorline
 autocmd FileType nerdtree setlocal nocursorcolumn
 
 " Ensure cursorline and cursorcolumn are disabled in other file types
 autocmd BufEnter * if &filetype != 'nerdtree' | setlocal cursorline cursorcolumn | endif
 
+autocmd FileType html setlocal omnifunc=htmlcomplete#CompleteTags
 " ------------------------------------
 " Plugin Management using vim-plug
 " ------------------------------------
@@ -117,13 +119,15 @@ Plug 'MunifTanjim/nui.nvim'
 " Notify
 Plug 'rcarriga/nvim-notify'
 
+" Transparen
+Plug 'tribela/vim-transparent'
+
 call plug#end()
 
 " ------------------------------------
 " Theme Setup (Load after plugins)
 " ------------------------------------
 colorscheme onedark             " Set default colorscheme to 'poimandres'
-"set background=dark                " Set background to dark
 
 " ------------------------------------
 " Key Mappings and Other Settings
@@ -137,7 +141,7 @@ autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 " Automatically reload init.lua after saving
 augroup auto_reload_init
     autocmd!
-    autocmd BufWritePost init.vim source <afile> | PlugInstall | echo "init.vim reloaded!"
+    autocmd BufWritePost init.vim source <afile> | echo "init.vim reloaded!"
 augroup END
 
 " Automatically check for external changes and reload files
