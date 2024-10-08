@@ -23,11 +23,6 @@ function NERDTreeOpenInSplit()
     vim.cmd("NERDTreeFind") -- Open the file in the split
 end
 
--- Create a keymap for opening the selected file in a vertical split
-vim.cmd([[
-    autocmd FileType nerdtree nnoremap <silent> <leader>os :lua NERDTreeOpenInSplit()<CR>
-]])
-
 -- Automatically open NERDTree or move cursor based on arguments
 vim.api.nvim_create_autocmd("StdinReadPre", {
   pattern = "*",

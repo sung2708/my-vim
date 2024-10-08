@@ -1,15 +1,16 @@
+-- Mason setup for managing LSP servers
 require("mason").setup()
 
--- Setup Mason-LSPConfig to manage LSP servers
+-- Mason-LSPConfig setup to ensure required LSP servers are installed
 require("mason-lspconfig").setup({
-  ensure_installed = { "clangd", "pyright", "bashls", "gopls", "html", "cssls", "lua_ls" },  -- Added lua_ls to the list of servers
+  ensure_installed = { "clangd", "pyright", "bashls", "gopls", "html", "cssls", "lua_ls", "emmet_ls" },  -- Added emmet_ls to the list of servers
 })
 
--- Import LSPConfig
+-- Import LSPConfig and completion capabilities
 local lspconfig = require('lspconfig')
 local cmp_nvim_lsp = require('cmp_nvim_lsp')
 
--- Define a function to set up key mappings for LSP
+-- Function to set up key mappings for LSP
 local function on_attach(client, bufnr)
   local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
   local opts = { noremap = true, silent = true }
@@ -26,7 +27,7 @@ end
 -- Common capabilities for all servers
 local capabilities = cmp_nvim_lsp.default_capabilities()
 
--- Setup handlers for Mason-LSPConfig
+-- Mason-LSPConfig handlers for setting up LSP servers
 require("mason-lspconfig").setup_handlers({
   -- Default handler for all servers
   function(server_name)
@@ -37,18 +38,18 @@ require("mason-lspconfig").setup_handlers({
   end,
 
   -- Custom setup for clangd
-["clangd"] = function()
-  lspconfig.clangd.setup({
-    capabilities = capabilities,
-    on_attach = on_attach,
-    cmd = {
-      "clangd",
-      "--background-index",
-      "--header-insertion=never",                  -- Optional: Disable automatic header insertion
-      "--query-driver=C:/Program Files/mingw64/bin/*" -- Ensure clangd uses MinGW binaries
-    },
-  })
-end,
+  ["clangd"] = function()
+    lspconfig.clangd.setup({
+      capabilities = capabilities,
+      on_attach = on_attach,
+      cmd = {
+        "clangd",
+        "--background-index",
+        "--header-insertion=never",                  -- Optional: Disable automatic header insertion
+        "--query-driver=C:/Program Files/mingw64/bin/*" -- Ensure clangd uses MinGW binaries
+      },
+    })
+  end,
 
   -- Custom setup for pyright
   ["pyright"] = function()
@@ -57,13 +58,18 @@ end,
       on_attach = on_attach,
     })
   end,
-
-  -- Add setups for other servers
-  ["bashls"] = function()
-    lspconfig.bashls.setup({
-      capabilities = capabilities,
-      on_attach = on_attach,
-    })
-  end,
-  -- (Continue with the rest of your servers)
 })
+
+-- Setup for emmet_ls
+lspconfig.emmet_ls.setup({
+  capabilities = capabilities,
+  filetypes = { "css", "eruby", "html", "javascript", "javascriptreact", "less", "sass", "scss", "svelte", "pug", "typescriptreact", "vue" },
+  init_options = {
+    html = {
+      options = {
+        ["bem.enabled"] = true,  -- Enable BEM support
+      },
+    },
+  }
+})
+

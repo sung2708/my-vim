@@ -27,6 +27,7 @@ set nobackup                       " Disable backup
 set shell=pwsh                     " Set the shell to PowerShell
 set shellcmdflag=-command          " Set flag for command execution in the shell
 set shellxquote=                   " Set quoting for the shell
+set splitright                     " Open new split windows to the right
 
 " Disable cursorline and cursorcolumn for specific buffers (NERDTree)
 autocmd FileType nerdtree setlocal cursorline
@@ -60,11 +61,14 @@ Plug 'sainnhe/sonokai'
 Plug 'polirritmico/monokai-nightasty.nvim'
 Plug 'kaiuri/nvim-juliana'
 Plug 'olivercederborg/poimandres.nvim'
+Plug 'rose-pine/neovim'
+Plug 'shaunsingh/nord.nvim'
 
 " File explorer and related plugins
 Plug 'preservim/nerdtree'
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'ryanoasis/vim-devicons'
+Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 
 " File search (Telescope)
 Plug 'nvim-lua/plenary.nvim'
@@ -122,12 +126,15 @@ Plug 'rcarriga/nvim-notify'
 " Transparen
 Plug 'tribela/vim-transparent'
 
+" Tag
+Plug 'windwp/nvim-ts-autotag'
+
 call plug#end()
 
 " ------------------------------------
 " Theme Setup (Load after plugins)
 " ------------------------------------
-colorscheme onedark             " Set default colorscheme to 'poimandres'
+colorscheme nord             " Set default colorscheme to 'nord'
 
 " ------------------------------------
 " Key Mappings and Other Settings

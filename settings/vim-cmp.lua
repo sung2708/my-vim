@@ -24,13 +24,7 @@ cmp.setup({
     ['<C-f>'] = cmp.mapping.scroll_docs(4),           -- Scroll documentation down
     ['<C-Space>'] = cmp.mapping.complete(),            -- Trigger completion
     ['<C-e>'] = cmp.mapping.abort(),                   -- Abort completion
-    ['<CR>'] = cmp.mapping(function(fallback)
-      if cmp.visible() then
-        cmp.confirm({ select = true }) -- Confirm selection on Enter
-      else
-        fallback()  -- If no completion menu, fallback to regular Enter
-      end
-    end),
+    ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Confirm selection on Enter
     ['<C-n>'] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert }), -- Next completion item
     ['<C-p>'] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Insert }), -- Previous completion item
   }),
