@@ -2,7 +2,7 @@ My NeoVim (v1) setting, I using [vim-plug](https://github.com/junegunn/vim-plug)
 
 [Note]
 - Can run on both Window and Linux
-- Run command :PlugInstall after pulling this resource
+- Run command ```:PlugInstall``` after pulling this resource
 
 [Requirement]
 - NodeJS
