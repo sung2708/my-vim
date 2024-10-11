@@ -3,7 +3,7 @@ require("mason").setup()
 
 -- Mason-LSPConfig setup to ensure required LSP servers are installed
 require("mason-lspconfig").setup({
-  ensure_installed = { "clangd", "pyright", "bashls", "gopls", "html", "cssls", "lua_ls", "emmet_ls" },  -- Added emmet_ls to the list of servers
+  ensure_installed = { "clangd", "pyright", "bashls", "gopls", "html", "cssls", "lua_ls", "emmet_ls" },  -- Add any additional servers as needed
 })
 
 -- Import LSPConfig and completion capabilities
@@ -20,21 +20,21 @@ local function on_attach(client, bufnr)
   buf_set_keymap('n', 'K', '<Cmd>lua vim.lsp.buf.hover()<CR>', opts)            -- Hover documentation
   buf_set_keymap('n', 'gi', '<Cmd>lua vim.lsp.buf.implementation()<CR>', opts)  -- Go to implementation
   buf_set_keymap('n', 'gr', '<Cmd>lua vim.lsp.buf.references()<CR>', opts)      -- Find references
-  buf_set_keymap('n', '<leader>rn', '<Cmd>lua vim.lsp.buf.rename()<CR>', opts)  -- Rename
+  buf_set_keymap('n', '<leader>rn', '<Cmd>lua vim.lsp.buf.rename()<CR>', opts)  -- Rename symbol
   buf_set_keymap('n', '<leader>ca', '<Cmd>lua vim.lsp.buf.code_action()<CR>', opts) -- Code action
 end
 
--- Common capabilities for all servers
+-- Common capabilities for all LSP servers
 local capabilities = cmp_nvim_lsp.default_capabilities()
 
 -- Mason-LSPConfig handlers for setting up LSP servers
 require("mason-lspconfig").setup_handlers({
   -- Default handler for all servers
   function(server_name)
-    lspconfig[server_name].setup {
+    lspconfig[server_name].setup({
       capabilities = capabilities,
       on_attach = on_attach,
-    }
+    })
   end,
 
   -- Custom setup for clangd
@@ -60,10 +60,10 @@ require("mason-lspconfig").setup_handlers({
   end,
 })
 
--- Setup for emmet_ls
+-- Setup for emmet_ls for HTML and front-end languages, including EJS and HBS
 lspconfig.emmet_ls.setup({
   capabilities = capabilities,
-  filetypes = { "css", "eruby", "html", "javascript", "javascriptreact", "less", "sass", "scss", "svelte", "pug", "typescriptreact", "vue" },
+  filetypes = { "css", "eruby", "html", "javascript", "javascriptreact", "less", "sass", "scss", "svelte", "pug", "ejs", "hbs", "typescriptreact", "vue" },  -- Add more filetypes as needed
   init_options = {
     html = {
       options = {
@@ -72,4 +72,3 @@ lspconfig.emmet_ls.setup({
     },
   }
 })
-

@@ -1,83 +1,84 @@
 require'nvim-treesitter.configs'.setup {
-    -- Specify the languages to install parsers for
+    -- Install parsers for the specified languages and frameworks/view engines
     ensure_installed = {
-        "python", "javascript", "typescript", "html", "css",
-        "java", "go", "c", "cpp"
-        -- Add more languages as needed
+        "python", "javascript", "typescript", "html", "css", 
+        "java", "go", "c", "cpp",
+        --"ejs", "hbs", -- Add EJS and HBS parsers if available
+        -- Add other frameworks or template engines as needed
     },
 
-    -- Enable syntax highlighting and disable Vim regex-based highlighting
+    -- Enable Treesitter-based syntax highlighting and disable regex-based highlighting
     highlight = {
-        enable = true,                              -- Enable treesitter-based highlighting
-        additional_vim_regex_highlighting = false,  -- Disable regex-based highlighting for better performance
+        enable = true,
+        additional_vim_regex_highlighting = false,  -- Better performance by avoiding regex-based highlighting
     },
 
-    -- Enable automatic indentation (with exceptions)
+    -- Enable automatic indentation
     indent = {
-        enable = true,                              -- Enable treesitter-based indentation
-        disable = { "python" },                     -- Python indentation can be tricky, disable if needed
+        enable = true,
+        disable = { "python" },  -- Disable for Python if indentation issues arise
     },
 
-    -- Configure text objects for better code manipulation
+    -- Text objects configuration for easy navigation and manipulation
     textobjects = {
         select = {
-            enable = true,                          -- Enable text object selection
-            lookahead = true,                       -- Move to the next object automatically
+            enable = true,
+            lookahead = true,
             keymaps = {
-                ["af"] = "@function.outer",         -- Select around the function
-                ["if"] = "@function.inner",         -- Select inside the function
-                ["ab"] = "@block.outer",            -- Select around the block
-                ["ib"] = "@block.inner",            -- Select inside the block
-                ["ac"] = "@class.outer",            -- Select around the class
-                ["ic"] = "@class.inner",            -- Select inside the class
+                ["af"] = "@function.outer",  -- Around function
+                ["if"] = "@function.inner",  -- Inside function
+                ["ab"] = "@block.outer",     -- Around block
+                ["ib"] = "@block.inner",     -- Inside block
+                ["ac"] = "@class.outer",     -- Around class
+                ["ic"] = "@class.inner",     -- Inside class
             },
         },
         move = {
-            enable = true,                          -- Enable movement between text objects
-            set_jumps = true,                       -- Save jumps to jumplist for easy navigation
+            enable = true,
+            set_jumps = true,  -- Save jumps for easy navigation
             goto_next_start = {
-                ["]f"] = "@function.outer",         -- Move to the start of the next function
-                ["]b"] = "@block.outer",            -- Move to the start of the next block
+                ["]f"] = "@function.outer",  -- Next function start
+                ["]b"] = "@block.outer",     -- Next block start
             },
             goto_next_end = {
-                ["]F"] = "@function.outer",         -- Move to the end of the next function
-                ["]B"] = "@block.outer",            -- Move to the end of the next block
+                ["]F"] = "@function.outer",  -- Next function end
+                ["]B"] = "@block.outer",     -- Next block end
             },
             goto_previous_start = {
-                ["[f"] = "@function.outer",         -- Move to the start of the previous function
-                ["[b"] = "@block.outer",            -- Move to the start of the previous block
+                ["[f"] = "@function.outer",  -- Previous function start
+                ["[b"] = "@block.outer",     -- Previous block start
             },
             goto_previous_end = {
-                ["[F"] = "@function.outer",         -- Move to the end of the previous function
-                ["[B"] = "@block.outer",            -- Move to the end of the previous block
+                ["[F"] = "@function.outer",  -- Previous function end
+                ["[B"] = "@block.outer",     -- Previous block end
             },
         },
     },
 
-    -- Enable code folding based on syntax
+    -- Enable code folding based on Treesitter
     fold = {
-        enable = true,                              -- Enable code folding
-        disable = { "lua" },                        -- Disable folding for specific languages (like Lua if needed)
+        enable = true,
+        disable = { "lua" },  -- Disable for Lua if needed
         keymaps = {
-            toggle = "zM",                          -- Toggle folding
-            open = "zR",                            -- Open all folds
-            close = "zM",                           -- Close all folds
+            toggle = "zM",  -- Toggle folding
+            open = "zR",    -- Open all folds
+            close = "zM",   -- Close all folds
         },
     },
 
-    -- Enable context-based comment strings for different languages
+    -- Enable context-aware comments based on the language
     context_commentstring = {
-        enable = true,                              -- Context-aware comments
-        enable_autocmd = false,                     -- Disable automatic commands
+        enable = true,
+        enable_autocmd = false,  -- Disable automatic commands
     },
 
-    -- Enable incremental selection for more flexible code selection
+    -- Incremental selection setup for better code selection
     incremental_selection = {
-        enable = true,                              -- Enable incremental selection
+        enable = true,
         keymaps = {
-            init_selection = "<CR>",                -- Initialize the selection
-            node_incremental = "<TAB>",             -- Move to the next node incrementally
-            node_decremental = "<S-TAB>",           -- Move to the previous node incrementally
+            init_selection = "<CR>",      -- Start selection
+            node_incremental = "<TAB>",   -- Increment selection to the next node
+            node_decremental = "<S-TAB>", -- Decrement selection to the previous node
         },
     },
 }

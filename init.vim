@@ -30,22 +30,18 @@ set shellxquote=                   " Set quoting for the shell
 set splitright                     " Open new split windows to the right
 
 " Disable cursorline and cursorcolumn for specific buffers (NERDTree)
-autocmd FileType nerdtree setlocal cursorline
-autocmd FileType nerdtree setlocal nocursorcolumn
+autocmd FileType nerdtree setlocal cursorline nocursorcolumn
 
 " Ensure cursorline and cursorcolumn are disabled in other file types
 autocmd BufEnter * if &filetype != 'nerdtree' | setlocal cursorline cursorcolumn | endif
 
+" HTML tag completion
 autocmd FileType html setlocal omnifunc=htmlcomplete#CompleteTags
+
 " ------------------------------------
 " Plugin Management using vim-plug
 " ------------------------------------
-
-if has("win32") || has("win64")
-    let plug_dir = '~/AppData/Local/nvim/plugged'
-else
-    let plug_dir = stdpath('config') . '/plugged'
-endif
+let plug_dir = has("win32") || has("win64") ? '~/AppData/Local/nvim/plugged' : stdpath('config') . '/plugged'
 
 call plug#begin(plug_dir)
 
@@ -123,12 +119,14 @@ Plug 'MunifTanjim/nui.nvim'
 " Notify
 Plug 'rcarriga/nvim-notify'
 
-" Transparen
+" Transparency
 Plug 'tribela/vim-transparent'
 
 " Tag
 Plug 'windwp/nvim-ts-autotag'
 
+" Formatter
+Plug 'stevearc/conform.nvim'
 call plug#end()
 
 " ------------------------------------

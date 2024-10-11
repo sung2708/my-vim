@@ -8,7 +8,7 @@ require("notify").setup({
   
   -- Options for displaying the notification
   stages = "fade_in_slide_out",   -- Animation style for displaying notifications
-  timeout = 2000,                 -- Duration before the notification disappears (in milliseconds)
+  timeout = 200,                 -- Duration before the notification disappears (in milliseconds)
   max_width = 50,                 -- Maximum width of the notification
   max_height = 10,                -- Maximum height of the notification
   icons = {
