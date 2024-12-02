@@ -1,29 +1,27 @@
--- NERDTree key mappings
+-- Key mappings for NERDTree
 local opts = { noremap = true, silent = true, desc = "NERDTree" }
 
+-- Cấu hình các phím tắt NERDTree
 vim.api.nvim_set_keymap('n', '<leader>n', ':NERDTreeFocus<CR>', opts) -- Focus NERDTree
 vim.api.nvim_set_keymap('n', '<C-n>', ':NERDTree<CR>', opts) -- Open NERDTree
-vim.api.nvim_set_keymap('n', '<C-t>', ':NERDTreeToggle<CR>', opts) -- Toggle NERDTree
-vim.api.nvim_set_keymap('n', '<C-f>', ':NERDTreeFind<CR>', opts) -- Search file in NERDTree
-vim.api.nvim_set_keymap('n', '<leader>r', ':NERDTreeRefreshRoot<CR>', opts) -- Refresh NERDTree Root
+vim.api.nvim_set_keymap('n', '<C-t>', ':NERDTreeToggle<CR>', opts) -- Toggle NERDTree visibility
+vim.api.nvim_set_keymap('n', '<C-f>', ':NERDTreeFind<CR>', opts) -- Find file in NERDTree
+vim.api.nvim_set_keymap('n', '<leader>r', ':NERDTreeRefreshRoot<CR>', opts) -- Refresh NERDTree root
 vim.api.nvim_set_keymap('n', '<leader>cs', ':close<CR>', opts) -- Close NERDTree
 
--- Configure arrows for NERDTree
+-- Configure NERDTree arrows and sync cursor line
 vim.g.NERDTreeDirArrowExpandable = '▸'
 vim.g.NERDTreeDirArrowCollapsible = '▾'
-
--- Enable highlighting for the current file in NERDTree
-vim.g.nerdtree_sync_cursorline = 1
+vim.g.nerdtree_sync_cursorline = 1  -- Highlight current file in NERDTree
 
 -- Function to open the selected file in a vertical split
 function NERDTreeOpenInSplit()
-    -- Close NERDTree if it's focused, and open the file in a vertical split
     vim.cmd("wincmd l") -- Move to the buffer
-    vim.cmd("vsplit") -- Open a vertical split
-    vim.cmd("NERDTreeFind") -- Open the file in the split
+    vim.cmd("vsplit")   -- Open a vertical split
+    vim.cmd("NERDTreeFind") -- Locate the file in NERDTree
 end
 
--- Automatically open NERDTree or move cursor based on arguments
+-- Autocommands for NERDTree behavior
 vim.api.nvim_create_autocmd("StdinReadPre", {
   pattern = "*",
   callback = function()
@@ -31,17 +29,18 @@ vim.api.nvim_create_autocmd("StdinReadPre", {
   end,
 })
 
+-- Automatically open NERDTree on VimEnter, switch window if arguments or stdin
 vim.api.nvim_create_autocmd("VimEnter", {
   pattern = "*",
   callback = function()
-    vim.cmd("NERDTree") -- Open NERDTree
-    if #vim.fn.argv() > 0 or vim.g.std_in then -- Check if there are arguments or stdin
-      vim.cmd("wincmd p") -- Switch to the previous window
+    vim.cmd("NERDTree")
+    if #vim.fn.argv() > 0 or vim.g.std_in then
+      vim.cmd("wincmd p") -- Switch to previous window
     end
   end,
 })
 
--- Git status indicator mapping
+-- Git status indicator mapping (customized)
 vim.g.NERDTreeGitStatusIndicatorMapCustom = {
     Modified  = '✹',
     Staged    = '✚',

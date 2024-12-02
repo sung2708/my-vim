@@ -1,37 +1,39 @@
+-- Flash plugin setup
 require('flash').setup({
-  -- Define modes for jumping
+  -- Define modes for jump behaviors
   modes = {
-    -- Configuration for character mode
+    -- Character mode: jump to specific characters
     char = {
-      jump_labels = true,  -- Show labels when jumping
-      multi_window = true, -- Allow jumping across multiple windows
-      highlight = {        -- Customize highlights
-        backdrop = true,   -- Dim areas outside of the jump target
+      jump_labels = true,   -- Show labels for quick navigation
+      multi_window = true,  -- Enable jumping across all windows
+      highlight = {
+        backdrop = true,    -- Dim non-target areas for focus
       },
     },
-    -- Configuration for word mode
+    -- Word mode: jump to specific words
     word = {
-      jump_labels = true,  -- Show labels for each word
+      jump_labels = true,   -- Show labels for each word
     },
   },
-  -- Search behavior configuration
+  -- Search configuration
   search = {
-    mode = "fuzzy",  -- Use fuzzy search mode
-    incremental = true,  -- Show results as you type
+    mode = "fuzzy",          -- Fuzzy matching for flexible search
+    incremental = true,      -- Update results as you type
   },
 })
 
--- Key mappings to use Flash
--- Jump to a character with 's'
+-- Key mappings for Flash plugin
+local keymap = vim.api.nvim_set_keymap
+local opts = { noremap = true, silent = true }
 
-vim.api.nvim_set_keymap('n', 's', ":lua require('flash').jump()<CR>", { noremap = true, silent = true, desc = "Jump to a character using Flash" })
+-- Jump to a character
+keymap('n', 's', ":lua require('flash').jump()<CR>", vim.tbl_extend("force", opts, { desc = "Jump to a character using Flash" }))
 
--- Jump by word with 'w'
-vim.api.nvim_set_keymap('n', 'w', ":lua require('flash').jump({ search = { mode = 'word' } })<CR>", { noremap = true, silent = true, desc = "Jump by word using Flash" })
+-- Jump by word
+keymap('n', 'w', ":lua require('flash').jump({ search = { mode = 'word' } })<CR>", vim.tbl_extend("force", opts, { desc = "Jump by word using Flash" }))
 
--- Jump through the entire file with 'f'
-vim.api.nvim_set_keymap('n', 'f', ":lua require('flash').jump({ search = { mode = 'all' } })<CR>", { noremap = true, silent = true, desc = "Jump through entire file using Flash" })
+-- Jump across the entire file
+keymap('n', 'f', ":lua require('flash').jump({ search = { mode = 'all' } })<CR>", vim.tbl_extend("force", opts, { desc = "Jump through the entire file using Flash" }))
 
--- Disable search highlighting with '<leader>nh'
-vim.api.nvim_set_keymap('n', '<leader>nh', ":nohlsearch<CR>", { noremap = true, silent = true, desc = "Disable search highlighting" })
-
+-- Disable search highlighting
+keymap('n', '<leader>nh', ":nohlsearch<CR>", vim.tbl_extend("force", opts, { desc = "Disable search highlighting" }))

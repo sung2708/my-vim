@@ -1,84 +1,68 @@
-require'nvim-treesitter.configs'.setup {
-    -- Install parsers for the specified languages and frameworks/view engines
-    ensure_installed = {
-        "python", "javascript", "typescript", "html", "css", 
-        "java", "go", "c", "cpp",
-        --"ejs", "hbs", -- Add EJS and HBS parsers if available
-        -- Add other frameworks or template engines as needed
-    },
+-- Configure nvim-treesitter for various features
+require('nvim-treesitter.configs').setup {
+  -- Parsers to install for specific languages
+  ensure_installed = {
+    "python", "javascript", "typescript", "html", "css", 
+    "java", "go", "c", "cpp",
+  },
 
-    -- Enable Treesitter-based syntax highlighting and disable regex-based highlighting
-    highlight = {
-        enable = true,
-        additional_vim_regex_highlighting = false,  -- Better performance by avoiding regex-based highlighting
-    },
+  -- Enable syntax highlighting (disable additional regex highlighting for performance)
+  highlight = {
+    enable = true,
+    additional_vim_regex_highlighting = false,  -- Disable regex-based highlighting
+  },
 
-    -- Enable automatic indentation
-    indent = {
-        enable = true,
-        disable = { "python" },  -- Disable for Python if indentation issues arise
-    },
+  -- Automatic indentation (disable for Python to prevent issues)
+  indent = {
+    enable = true,
+    disable = { "python" },  -- Disable automatic indentation for Python
+  },
 
-    -- Text objects configuration for easy navigation and manipulation
-    textobjects = {
-        select = {
-            enable = true,
-            lookahead = true,
-            keymaps = {
-                ["af"] = "@function.outer",  -- Around function
-                ["if"] = "@function.inner",  -- Inside function
-                ["ab"] = "@block.outer",     -- Around block
-                ["ib"] = "@block.inner",     -- Inside block
-                ["ac"] = "@class.outer",     -- Around class
-                ["ic"] = "@class.inner",     -- Inside class
-            },
-        },
-        move = {
-            enable = true,
-            set_jumps = true,  -- Save jumps for easy navigation
-            goto_next_start = {
-                ["]f"] = "@function.outer",  -- Next function start
-                ["]b"] = "@block.outer",     -- Next block start
-            },
-            goto_next_end = {
-                ["]F"] = "@function.outer",  -- Next function end
-                ["]B"] = "@block.outer",     -- Next block end
-            },
-            goto_previous_start = {
-                ["[f"] = "@function.outer",  -- Previous function start
-                ["[b"] = "@block.outer",     -- Previous block start
-            },
-            goto_previous_end = {
-                ["[F"] = "@function.outer",  -- Previous function end
-                ["[B"] = "@block.outer",     -- Previous block end
-            },
-        },
+  -- Text objects for enhanced code navigation and selection
+  textobjects = {
+    select = {
+      enable = true,
+      lookahead = true,  -- Enable lookahead for smarter selection
+      keymaps = {
+        ["af"] = "@function.outer",  -- Select around function
+        ["if"] = "@function.inner",  -- Select inside function
+        ["ac"] = "@class.outer",     -- Select around class
+        ["ic"] = "@class.inner",     -- Select inside class
+      },
     },
+    move = {
+      enable = true,
+      set_jumps = true,  -- Set jumps for back and forth navigation
+      goto_next_start = {
+        ["]f"] = "@function.outer",  -- Move to next function start
+        ["]c"] = "@class.outer",     -- Move to next class start
+      },
+      goto_previous_start = {
+        ["[f"] = "@function.outer",  -- Move to previous function start
+        ["[c"] = "@class.outer",     -- Move to previous class start
+      },
+    },
+  },
 
-    -- Enable code folding based on Treesitter
-    fold = {
-        enable = true,
-        disable = { "lua" },  -- Disable for Lua if needed
-        keymaps = {
-            toggle = "zM",  -- Toggle folding
-            open = "zR",    -- Open all folds
-            close = "zM",   -- Close all folds
-        },
-    },
+  -- Enable code folding using Treesitter (disable for Lua if needed)
+  fold = {
+    enable = true,
+    disable = { "lua" },  -- Disable folding for Lua
+  },
 
-    -- Enable context-aware comments based on the language
-    context_commentstring = {
-        enable = true,
-        enable_autocmd = false,  -- Disable automatic commands
-    },
+  -- Context-aware comment handling
+  context_commentstring = {
+    enable = true,
+    enable_autocmd = false,  -- Disable autocommands for comment context
+  },
 
-    -- Incremental selection setup for better code selection
-    incremental_selection = {
-        enable = true,
-        keymaps = {
-            init_selection = "<CR>",      -- Start selection
-            node_incremental = "<TAB>",   -- Increment selection to the next node
-            node_decremental = "<S-TAB>", -- Decrement selection to the previous node
-        },
+  -- Incremental selection keymaps
+  incremental_selection = {
+    enable = true,
+    keymaps = {
+      init_selection = "<CR>",      -- Start selection
+      node_incremental = "<TAB>",   -- Expand selection
+      node_decremental = "<S-TAB>", -- Shrink selection
     },
+  },
 }

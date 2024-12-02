@@ -1,45 +1,44 @@
+-- Safely load nvim-cmp
 local cmp_ok, cmp = pcall(require, 'cmp')
 if not cmp_ok then
   vim.notify("Error loading nvim-cmp", vim.log.levels.ERROR)
   return
 end
 
--- Safe loading of luasnip for snippet support
+-- Safely load LuaSnip
 local luasnip_ok, luasnip = pcall(require, 'luasnip')
-if not luasnip_ok then
-  vim.notify("Error loading luasnip", vim.log.levels.ERROR)
-end
 
--- Setup nvim-cmp for completion
+-- Setup nvim-cmp for autocompletion
 cmp.setup({
   snippet = {
     expand = function(args)
+      -- Expand snippets only if LuaSnip is successfully loaded
       if luasnip_ok then
-        luasnip.lsp_expand(args.body) -- Expand snippets with luasnip
+        luasnip.lsp_expand(args.body)
       end
     end,
   },
-  mapping = cmp.mapping.preset.insert({
-    ['<C-b>'] = cmp.mapping.scroll_docs(-4),          -- Scroll documentation up
-    ['<C-f>'] = cmp.mapping.scroll_docs(4),           -- Scroll documentation down
-    ['<C-Space>'] = cmp.mapping.complete(),            -- Trigger completion
-    ['<C-e>'] = cmp.mapping.abort(),                   -- Abort completion
+  mapping = {
+    ['<C-Space>'] = cmp.mapping.complete(),          -- Trigger completion menu
+    ['<C-e>'] = cmp.mapping.abort(),                 -- Abort completion
     ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Confirm selection on Enter
-    ['<C-n>'] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert }), -- Next completion item
-    ['<C-p>'] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Insert }), -- Previous completion item
-  }),
+    ['<C-n>'] = cmp.mapping.select_next_item(),      -- Navigate to next item
+    ['<C-p>'] = cmp.mapping.select_prev_item(),      -- Navigate to previous item
+  },
   sources = cmp.config.sources({
-    { name = 'nvim_lsp' },  -- LSP completion source
-    { name = 'luasnip' },   -- Snippets source
+    { name = 'nvim_lsp' },  -- LSP-based completions
+    { name = 'luasnip' },   -- Snippets from LuaSnip
   }, {
-    { name = 'buffer' },    -- Buffer completion source
+    { name = 'buffer' },    -- Buffer completions
   }),
   completion = {
-    completeopt = 'menu,menuone,noinsert', -- Recommended completion options
+    -- Recommended options for better completion behavior
+    completeopt = 'menu,menuone,noinsert',
   },
   formatting = {
+    -- Customize the appearance of completion items
     format = function(entry, vim_item)
-      -- Customize display with lspkind (if installed)
+      -- Optionally use lspkind for icons if installed
       local lspkind_ok, lspkind = pcall(require, 'lspkind')
       if lspkind_ok then
         vim_item.kind = lspkind.presets.default[vim_item.kind] .. ' ' .. vim_item.kind
@@ -53,15 +52,16 @@ cmp.setup({
 cmp.setup.cmdline('/', {
   mapping = cmp.mapping.preset.cmdline(),
   sources = {
-    { name = 'buffer' }
+    { name = 'buffer' } -- Use buffer as the source for search completion
   }
 })
 
--- Setup for ':' command-line completion
+-- Setup for ':' command-line completion (command mode)
 cmp.setup.cmdline(':', {
   mapping = cmp.mapping.preset.cmdline(),
-  sources = {
-    { name = 'path' },   -- Path completion source
-    { name = 'cmdline' } -- Command-line completion source
-  }
+  sources = cmp.config.sources({
+    { name = 'path' },    -- Path completion (files and directories)
+  }, {
+    { name = 'cmdline' }  -- Command-line completion
+  })
 })

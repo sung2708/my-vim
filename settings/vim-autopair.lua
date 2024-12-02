@@ -1,30 +1,33 @@
--- Setup nvim-autopairs for automatic pairing of brackets, parentheses, quotes, etc.
+-- nvim-autopairs setup
+-- Automatically manage the pairing of brackets, parentheses, quotes, etc.
 local npairs = require("nvim-autopairs")
 npairs.setup({
-  check_ts = true,  -- Enable Treesitter integration for more intelligent pairing
-  fast_wrap = {},   -- Enable fast wrapping functionality
+  check_ts = true,  -- Use Treesitter for better context-aware pairing
+  fast_wrap = {},   -- Enable fast wrapping functionality with default options
 })
 
--- Integration with nvim-cmp to automatically insert pairs after confirming a completion
+-- nvim-autopairs integration with nvim-cmp
+-- Ensures that completing a suggestion also closes the corresponding pair if applicable
 local cmp_autopairs = require("nvim-autopairs.completion.cmp")
 local cmp = require("cmp")
 cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
 
--- Setup nvim-ts-autotag for automatic closing of HTML tags in specified filetypes
+-- nvim-ts-autotag setup
+-- Automatically closes HTML/XML tags in supported filetypes
 require('nvim-ts-autotag').setup({
   filetypes = { 
-    "html", 
-    "javascript", 
-    "javascriptreact", 
-    "typescriptreact", 
-    "vue", 
-    "svelte", 
-    "xml", 
-    "php", 
-    "markdown", 
-    "eruby",  -- Add view engines like ERB
-    "pug",    -- Add Pug for template files
-    "ejs",    -- Add EJS for Express.js templates
-    "hbs",    -- Add Handlebars for HBS files
+    "html",                -- Standard HTML
+    "javascript",          -- For JSX-like syntax
+    "javascriptreact",     -- React JSX
+    "typescriptreact",     -- React TSX
+    "vue",                 -- Vue.js templates
+    "svelte",              -- Svelte templates
+    "xml",                 -- XML documents
+    "php",                 -- PHP files
+    "markdown",            -- Markdown files
+    "eruby",               -- Embedded Ruby (ERB) files
+    "pug",                 -- Pug/Jade templates
+    "ejs",                 -- Embedded JavaScript templates (EJS)
+    "hbs",                 -- Handlebars (HBS) templates
   },
 })

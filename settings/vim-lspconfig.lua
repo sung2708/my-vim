@@ -1,43 +1,49 @@
--- Mason setup for managing LSP servers
+-- Initialize Mason and Mason-LSPConfig for managing and automatically installing LSP servers
 require("mason").setup()
-
--- Mason-LSPConfig setup to ensure required LSP servers are installed
 require("mason-lspconfig").setup({
-  ensure_installed = { "clangd", "pyright", "bashls", "gopls", "html", "cssls", "lua_ls", "emmet_ls" },  -- Add any additional servers as needed
+  ensure_installed = { "clangd", "pyright", "bashls", "gopls", "html", "cssls", "lua_ls", "emmet_ls" }, -- Specify required LSP servers
 })
 
--- Import LSPConfig and completion capabilities
+-- Import necessary modules
 local lspconfig = require('lspconfig')
 local cmp_nvim_lsp = require('cmp_nvim_lsp')
 
--- Function to set up key mappings for LSP
+-- Function to define key mappings when an LSP attaches to a buffer
 local function on_attach(client, bufnr)
-  local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
   local opts = { noremap = true, silent = true }
-
-  -- Key mappings for LSP functions
-  buf_set_keymap('n', 'gd', '<Cmd>lua vim.lsp.buf.definition()<CR>', opts)       -- Go to definition
-  buf_set_keymap('n', 'K', '<Cmd>lua vim.lsp.buf.hover()<CR>', opts)            -- Hover documentation
-  buf_set_keymap('n', 'gi', '<Cmd>lua vim.lsp.buf.implementation()<CR>', opts)  -- Go to implementation
-  buf_set_keymap('n', 'gr', '<Cmd>lua vim.lsp.buf.references()<CR>', opts)      -- Find references
-  buf_set_keymap('n', '<leader>rn', '<Cmd>lua vim.lsp.buf.rename()<CR>', opts)  -- Rename symbol
-  buf_set_keymap('n', '<leader>ca', '<Cmd>lua vim.lsp.buf.code_action()<CR>', opts) -- Code action
+  local keymap = {
+    { 'n', 'gd', '<Cmd>lua vim.lsp.buf.definition()<CR>', opts },        -- Go to definition
+    { 'n', 'K', '<Cmd>lua vim.lsp.buf.hover()<CR>', opts },              -- Hover for documentation
+    { 'n', 'gi', '<Cmd>lua vim.lsp.buf.implementation()<CR>', opts },    -- Go to implementation
+    { 'n', 'gr', '<Cmd>lua vim.lsp.buf.references()<CR>', opts },        -- Find references
+    { 'n', '<leader>rn', '<Cmd>lua vim.lsp.buf.rename()<CR>', opts },    -- Rename symbol
+    { 'n', '<leader>ca', '<Cmd>lua vim.lsp.buf.code_action()<CR>', opts } -- Show code actions
+  }
+  
+  for _, map in ipairs(keymap) do
+    vim.api.nvim_buf_set_keymap(bufnr, unpack(map))
+  end
 end
 
--- Common capabilities for all LSP servers
+-- Configure common LSP capabilities with nvim-cmp integration
 local capabilities = cmp_nvim_lsp.default_capabilities()
 
--- Mason-LSPConfig handlers for setting up LSP servers
+-- Default LSP configuration function (for most LSP servers)
+local function setup_lsp(server_name)
+  lspconfig[server_name].setup({
+    capabilities = capabilities,
+    on_attach = on_attach,
+  })
+end
+
+-- Setup LSP servers using Mason-LSPConfig handlers
 require("mason-lspconfig").setup_handlers({
-  -- Default handler for all servers
+  -- Default handler for all LSP servers
   function(server_name)
-    lspconfig[server_name].setup({
-      capabilities = capabilities,
-      on_attach = on_attach,
-    })
+    setup_lsp(server_name)
   end,
 
-  -- Custom setup for clangd
+  -- Specific settings for clangd (e.g., MinGW driver setup)
   ["clangd"] = function()
     lspconfig.clangd.setup({
       capabilities = capabilities,
@@ -45,29 +51,26 @@ require("mason-lspconfig").setup_handlers({
       cmd = {
         "clangd",
         "--background-index",
-        "--header-insertion=never",                  -- Optional: Disable automatic header insertion
-        "--query-driver=C:/Program Files/mingw64/bin/*" -- Ensure clangd uses MinGW binaries
+        "--header-insertion=never",                  -- Disable automatic header insertion
+        "--query-driver=C:/Program Files/mingw64/bin/*" -- Set MinGW as the driver for clangd
       },
     })
   end,
 
-  -- Custom setup for pyright
+  -- Specific settings for pyright
   ["pyright"] = function()
-    lspconfig.pyright.setup({
-      capabilities = capabilities,
-      on_attach = on_attach,
-    })
+    setup_lsp("pyright")
   end,
 })
 
--- Setup for emmet_ls for HTML and front-end languages, including EJS and HBS
+-- Configure Emmet LSP for web development languages and frameworks
 lspconfig.emmet_ls.setup({
   capabilities = capabilities,
-  filetypes = { "css", "eruby", "html", "javascript", "javascriptreact", "less", "sass", "scss", "svelte", "pug", "ejs", "hbs", "typescriptreact", "vue" },  -- Add more filetypes as needed
+  filetypes = { "css", "eruby", "html", "javascript", "javascriptreact", "less", "sass", "scss", "svelte", "pug", "ejs", "hbs", "typescriptreact", "vue" },
   init_options = {
     html = {
       options = {
-        ["bem.enabled"] = true,  -- Enable BEM support
+        ["bem.enabled"] = true,  -- Enable BEM (Block Element Modifier) CSS naming support
       },
     },
   }

@@ -50,15 +50,9 @@ Plug 'Mofiqul/dracula.nvim'
 Plug 'navarasu/onedark.nvim'
 Plug 'folke/tokyonight.nvim'
 Plug 'catppuccin/nvim', { 'as': 'catppuccin' }
-Plug 'scottmckendry/cyberdream.nvim'
-Plug 'rebelot/kanagawa.nvim'
-Plug 'sho-87/kanagawa-paper.nvim'
 Plug 'sainnhe/sonokai'
-Plug 'polirritmico/monokai-nightasty.nvim'
 Plug 'kaiuri/nvim-juliana'
 Plug 'olivercederborg/poimandres.nvim'
-Plug 'rose-pine/neovim'
-Plug 'shaunsingh/nord.nvim'
 
 " File explorer and related plugins
 Plug 'preservim/nerdtree'
@@ -127,12 +121,13 @@ Plug 'windwp/nvim-ts-autotag'
 
 " Formatter
 Plug 'stevearc/conform.nvim'
+
 call plug#end()
 
 " ------------------------------------
 " Theme Setup (Load after plugins)
 " ------------------------------------
-colorscheme nord             " Set default colorscheme to 'nord'
+colorscheme poimandres             " Set default colorscheme to 'poimandres'
 
 " ------------------------------------
 " Key Mappings and Other Settings
@@ -144,10 +139,10 @@ nnoremap <silent> <leader>bd :bp \| sp \| bn \| bd<CR>
 autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 
 " Automatically reload init.lua after saving
-augroup auto_reload_init
-    autocmd!
-    autocmd BufWritePost init.vim source <afile> | echo "init.vim reloaded!"
-augroup END
+"augroup auto_reload_init
+    "autocmd!
+    "autocmd BufWritePost init.vim source <afile> | echo "init.vim reloaded!"
+"augroup END
 
 " Automatically check for external changes and reload files
 autocmd FocusGained,CursorHold * checktime
