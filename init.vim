@@ -55,10 +55,8 @@ Plug 'kaiuri/nvim-juliana'
 Plug 'olivercederborg/poimandres.nvim'
 
 " File explorer and related plugins
-Plug 'preservim/nerdtree'
-Plug 'Xuyuanp/nerdtree-git-plugin'
-Plug 'ryanoasis/vim-devicons'
-Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+Plug 'nvim-tree/nvim-tree.lua'
+Plug 'nvim-tree/nvim-web-devicons'
 
 " File search (Telescope)
 Plug 'nvim-lua/plenary.nvim'
@@ -143,6 +141,12 @@ autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
     "autocmd!
     "autocmd BufWritePost init.vim source <afile> | echo "init.vim reloaded!"
 "augroup END
+
+" Disable the default Tab mapping for GitHub Copilot
+let g:copilot_no_tab_map = v:true
+
+" Map Shift+Tab to accept Copilot suggestions in Insert mode
+inoremap <expr> <S-Tab> copilot#Accept("\<CR>")
 
 " Automatically check for external changes and reload files
 autocmd FocusGained,CursorHold * checktime

@@ -1,7 +1,7 @@
 -- Initialize Mason and Mason-LSPConfig for managing and automatically installing LSP servers
 require("mason").setup()
 require("mason-lspconfig").setup({
-  ensure_installed = { "clangd", "pyright", "bashls", "gopls", "html", "cssls", "lua_ls", "emmet_ls" }, -- Specify required LSP servers
+  ensure_installed = { "clangd", "pyright", "bashls", "gopls", "html", "cssls", "lua_ls", "emmet_ls" },
 })
 
 -- Import necessary modules
@@ -19,7 +19,7 @@ local function on_attach(client, bufnr)
     { 'n', '<leader>rn', '<Cmd>lua vim.lsp.buf.rename()<CR>', opts },    -- Rename symbol
     { 'n', '<leader>ca', '<Cmd>lua vim.lsp.buf.code_action()<CR>', opts } -- Show code actions
   }
-  
+
   for _, map in ipairs(keymap) do
     vim.api.nvim_buf_set_keymap(bufnr, unpack(map))
   end
@@ -51,8 +51,8 @@ require("mason-lspconfig").setup_handlers({
       cmd = {
         "clangd",
         "--background-index",
-        "--header-insertion=never",                  -- Disable automatic header insertion
-        "--query-driver=C:/Program Files/mingw64/bin/*" -- Set MinGW as the driver for clangd
+        "--header-insertion=never",
+        "--query-driver=C:/Program Files/mingw64/bin/*"
       },
     })
   end,

@@ -59,7 +59,7 @@ require("bufferline").setup {
         -- Offset for file explorers
         offsets = {
             {
-                filetype = "nerdtree",
+                filetype = "NvimTree", -- Changed from "NERDTree" to "NvimTree"
                 text = current_folder,
                 highlight = "Directory",
                 separator = true,

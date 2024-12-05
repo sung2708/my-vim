@@ -9,60 +9,60 @@ require('nvim-treesitter.configs').setup {
   -- Enable syntax highlighting (disable additional regex highlighting for performance)
   highlight = {
     enable = true,
-    additional_vim_regex_highlighting = false,  -- Disable regex-based highlighting
+    additional_vim_regex_highlighting = false,
   },
 
   -- Automatic indentation (disable for Python to prevent issues)
   indent = {
     enable = true,
-    disable = { "python" },  -- Disable automatic indentation for Python
+    disable = { "python" },
   },
 
   -- Text objects for enhanced code navigation and selection
   textobjects = {
     select = {
       enable = true,
-      lookahead = true,  -- Enable lookahead for smarter selection
+      lookahead = true,
       keymaps = {
-        ["af"] = "@function.outer",  -- Select around function
-        ["if"] = "@function.inner",  -- Select inside function
-        ["ac"] = "@class.outer",     -- Select around class
-        ["ic"] = "@class.inner",     -- Select inside class
+        ["af"] = "@function.outer",
+        ["if"] = "@function.inner",
+        ["ac"] = "@class.outer",
+        ["ic"] = "@class.inner",
       },
     },
     move = {
       enable = true,
-      set_jumps = true,  -- Set jumps for back and forth navigation
+      set_jumps = true,
       goto_next_start = {
-        ["]f"] = "@function.outer",  -- Move to next function start
-        ["]c"] = "@class.outer",     -- Move to next class start
+        ["]f"] = "@function.outer",
+        ["]c"] = "@class.outer",
       },
       goto_previous_start = {
-        ["[f"] = "@function.outer",  -- Move to previous function start
-        ["[c"] = "@class.outer",     -- Move to previous class start
+        ["[f"] = "@function.outer",
+        ["[c"] = "@class.outer",
       },
     },
   },
 
-  -- Enable code folding using Treesitter (disable for Lua if needed)
+  -- Enable code folding using Treesitter
   fold = {
     enable = true,
-    disable = { "lua" },  -- Disable folding for Lua
+    disable = { "lua" },
   },
 
   -- Context-aware comment handling
   context_commentstring = {
     enable = true,
-    enable_autocmd = false,  -- Disable autocommands for comment context
+    enable_autocmd = false,
   },
 
   -- Incremental selection keymaps
   incremental_selection = {
     enable = true,
     keymaps = {
-      init_selection = "<CR>",      -- Start selection
-      node_incremental = "<TAB>",   -- Expand selection
-      node_decremental = "<S-TAB>", -- Shrink selection
+      init_selection = "<CR>",
+      node_incremental = "<TAB>",
+      node_decremental = "<S-TAB>",
     },
   },
 }
