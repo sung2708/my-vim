@@ -77,7 +77,7 @@ require("bufferline").setup {
         duplicates_across_groups = true,
         persist_buffer_sort = true,
         move_wraps_at_ends = false,
-        separator_style = "slope",
+        separator_style = "padded_slope",
         enforce_regular_tabs = false,
         always_show_bufferline = true,
         auto_toggle_bufferline = true,

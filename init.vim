@@ -10,7 +10,7 @@ set cursorline                     " Highlight the current line
 set cursorcolumn                   " Highlight the current column
 set termguicolors                  " Enable 24-bit RGB color in the terminal
 set list                           " Show invisible characters (spaces, tabs)
-set listchars=space:.,tab:->       " Define invisible characters
+"set listchars=space:.,tab:->       " Define invisible characters
 set shiftwidth=4                   " Indentation width for autoindents
 set tabstop=4                      " Number of spaces per tab
 set expandtab                      " Use spaces instead of tabs
@@ -29,11 +29,16 @@ set shellcmdflag=-command          " Set flag for command execution in the shell
 set shellxquote=                   " Set quoting for the shell
 set splitright                     " Open new split windows to the right
 
-" Disable cursorline and cursorcolumn for specific buffers (NERDTree)
-autocmd FileType nerdtree setlocal cursorline nocursorcolumn
+" Disable cursorline and cursorcolumn for specific buffers (NvimTree)
+autocmd FileType 'NvimTree' setlocal cursorline nocursorcolumn
+
+" Disable cursorline and cursorcolumn for specific buffers (Bufferline)
+autocmd FileType 'bufferline' setlocal cursorline nocursorcolumn
 
 " Ensure cursorline and cursorcolumn are disabled in other file types
-autocmd BufEnter * if &filetype != 'nerdtree' | setlocal cursorline cursorcolumn | endif
+autocmd BufEnter * if &filetype != 'NvimTree' | setlocal cursorline cursorcolumn | endif
+
+
 
 " HTML tag completion
 autocmd FileType html setlocal omnifunc=htmlcomplete#CompleteTags
@@ -53,6 +58,7 @@ Plug 'catppuccin/nvim', { 'as': 'catppuccin' }
 Plug 'sainnhe/sonokai'
 Plug 'kaiuri/nvim-juliana'
 Plug 'olivercederborg/poimandres.nvim'
+Plug 'EdenEast/nightfox.nvim'
 
 " File explorer and related plugins
 Plug 'nvim-tree/nvim-tree.lua'
@@ -125,7 +131,7 @@ call plug#end()
 " ------------------------------------
 " Theme Setup (Load after plugins)
 " ------------------------------------
-colorscheme poimandres             " Set default colorscheme to 'poimandres'
+colorscheme poimandres            " Set default colorscheme to 'poimandres'
 
 " ------------------------------------
 " Key Mappings and Other Settings
@@ -146,7 +152,7 @@ autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 let g:copilot_no_tab_map = v:true
 
 " Map Shift+Tab to accept Copilot suggestions in Insert mode
-inoremap <expr> <S-Tab> copilot#Accept("\<CR>")
+inoremap <expr> <leader-Tab> copilot#Accept("\<CR>")
 
 " Automatically check for external changes and reload files
 autocmd FocusGained,CursorHold * checktime
