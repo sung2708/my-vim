@@ -133,7 +133,8 @@ call plug#end()
 " ------------------------------------
 " Theme Setup (Load after plugins)
 " ------------------------------------
-colorscheme poimandres            " Set default colorscheme to 'poimandres'
+
+colorscheme tokyonight            " Set default colorscheme to 'tokyonight'
 
 " ------------------------------------
 " Key Mappings and Other Settings
@@ -154,7 +155,7 @@ autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 let g:copilot_no_tab_map = v:true
 
 " Map Shift+Tab to accept Copilot suggestions in Insert mode
-inoremap <expr> <Right> copilot#Accept("\<CR>")
+inoremap <expr> <Right-Tab> copilot#Accept("\<CR>")
 
 " Automatically check for external changes and reload files
 autocmd FocusGained,CursorHold * checktime
