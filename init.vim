@@ -9,14 +9,16 @@ set showmode                       " Display current mode
 set cursorline                     " Highlight the current line
 set cursorcolumn                   " Highlight the current column
 set termguicolors                  " Enable 24-bit RGB color in the terminal
-set list                           " Show invisible characters (spaces, tabs)
+"set list                           " Show invisible characters (spaces, tabs)
 "set listchars=space:.,tab:->       " Define invisible characters
+set encoding=utf-8                 " Set encoding to UTF-8
 set shiftwidth=4                   " Indentation width for autoindents
 set tabstop=4                      " Number of spaces per tab
 set expandtab                      " Use spaces instead of tabs
 set smartindent                    " Automatically indent new lines
 set clipboard=unnamedplus          " Enable copying to system clipboard
 set scrolloff=10                   " Start scrolling 10 lines before the end
+set laststatus=2                   " Alway show status line"
 set nowrap                         " Disable line wrapping
 set hlsearch                       " Highlight search results
 set incsearch                      " Incremental search
@@ -152,7 +154,7 @@ autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 let g:copilot_no_tab_map = v:true
 
 " Map Shift+Tab to accept Copilot suggestions in Insert mode
-inoremap <expr> <leader-Tab> copilot#Accept("\<CR>")
+inoremap <expr> <Right> copilot#Accept("\<CR>")
 
 " Automatically check for external changes and reload files
 autocmd FocusGained,CursorHold * checktime
