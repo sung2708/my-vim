@@ -1,24 +1,24 @@
--- Configure nvim-treesitter for various features
+-- Configure nvim-treesitter
 require('nvim-treesitter.configs').setup {
   -- Parsers to install for specific languages
   ensure_installed = {
-    "python", "javascript", "typescript", "html", "css", 
+    "python", "javascript", "typescript", "html", "css",
     "java", "go", "c", "cpp",
   },
 
-  -- Enable syntax highlighting (disable additional regex highlighting for performance)
+  -- Syntax highlighting (disable regex for better performance)
   highlight = {
     enable = true,
     additional_vim_regex_highlighting = false,
   },
 
-  -- Automatic indentation (disable for Python to prevent issues)
+  -- Indentation (disabled for Python due to issues)
   indent = {
     enable = true,
     disable = { "python" },
   },
 
-  -- Text objects for enhanced code navigation and selection
+  -- Enhanced code navigation and selection with text objects
   textobjects = {
     select = {
       enable = true,
@@ -44,7 +44,7 @@ require('nvim-treesitter.configs').setup {
     },
   },
 
-  -- Enable code folding using Treesitter
+  -- Enable code folding with Treesitter (disabled for lua)
   fold = {
     enable = true,
     disable = { "lua" },

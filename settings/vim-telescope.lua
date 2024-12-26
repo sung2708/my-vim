@@ -2,7 +2,7 @@
 require('telescope').setup {
   defaults = {
     layout_config = {
-      horizontal = {  -- Horizontal layout configuration
+      horizontal = {
         preview_width = 0.7,  -- Preview window width (70% of the space)
         width = 0.8,          -- Total width (80% of the space)
         height = 0.7,         -- Total height (70% of the window)
@@ -15,10 +15,9 @@ require('telescope').setup {
 -- Local options for key mappings (non-recursive, silent)
 local opts = { noremap = true, silent = true }
 
--- General Telescope key mappings with layout configuration
-local function telescope_with_layout(func, description)
+-- General function to set key mappings for Telescope commands with consistent layout
+local function telescope_keymap(func, description)
   vim.keymap.set('n', '<leader>'..func[1], function()
-    -- Call Telescope function with consistent layout width
     require('telescope.builtin')[func[2]]({
       layout_config = { width = 0.8 },  -- Ensure consistent width across all mappings
     })
@@ -26,7 +25,7 @@ local function telescope_with_layout(func, description)
 end
 
 -- Define key mappings for Telescope commands with layout configuration
-telescope_with_layout({'ff', 'find_files'}, 'Telescope find files')
-telescope_with_layout({'fg', 'live_grep'}, 'Telescope live grep')
-telescope_with_layout({'fb', 'buffers'}, 'Telescope buffers')
-telescope_with_layout({'fh', 'help_tags'}, 'Telescope help tags')
+telescope_keymap({'ff', 'find_files'}, 'Telescope find files')
+telescope_keymap({'fg', 'live_grep'}, 'Telescope live grep')
+telescope_keymap({'fb', 'buffers'}, 'Telescope buffers')
+telescope_keymap({'fh', 'help_tags'}, 'Telescope help tags')

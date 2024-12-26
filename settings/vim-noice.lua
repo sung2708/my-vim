@@ -182,9 +182,25 @@ require("noice").setup({
   format = {}, -- Formatting options
 })
 
--- Keymaps cho các chức năng hữu ích
+-- Keymaps for useful functions
 local opts = { noremap = true, silent = true }
 vim.api.nvim_set_keymap("n", "<leader>nh", "<cmd>Noice history<CR>", opts) -- show history
 vim.api.nvim_set_keymap("n", "<leader>nl", "<cmd>Noice last<CR>", opts) -- show last message
 vim.api.nvim_set_keymap("n", "<leader>ne", "<cmd>Noice errors<CR>", opts) -- show errors
 vim.api.nvim_set_keymap("n", "<leader>na", "<cmd>Noice all<CR>", opts) -- show all messages
+
+-- Replace Flash with Leap for improved navigation
+-- Setup Leap for better jump actions
+require("leap").setup({
+  -- Leap settings (adjust them to your preference)
+  opts = {
+    case_sensitive = true, -- Enable case sensitivity
+    substitute_chars = { ['\r'] = '¬' }, -- Substitute characters for special symbols
+  },
+
+  -- Keybindings for Leap's jump actions
+  keymaps = {
+    leap_forward = 's', -- Set the key for jumping forward
+    leap_backward = 'S', -- Set the key for jumping backward
+  },
+})

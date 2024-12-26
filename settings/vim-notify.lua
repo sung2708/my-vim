@@ -6,18 +6,12 @@ vim.api.nvim_set_hl(0, "NotifyBackground", { bg = notify_bg_color })
 
 -- Require and set up the Notify plugin
 require("notify").setup({
-  -- Define the background color for notifications
+  -- General configuration
   background_colour = notify_bg_color,  -- Reusing the color variable
-
-  -- Animation style for notifications (fade in and slide out)
-  stages = "fade_in_slide_out",
-
-  -- Duration for which the notification will be visible
-  timeout = 200,  -- Time in milliseconds
-
-  -- Maximum dimensions for the notification
-  max_width = 50,   -- Max width of the notification
-  max_height = 10,  -- Max height of the notification
+  stages = "fade_in_slide_out",          -- Animation style for notifications
+  timeout = 200,                         -- Duration for which the notification will be visible
+  max_width = 50,                        -- Max width of the notification
+  max_height = 10,                       -- Max height of the notification
 
   -- Icons for different notification levels
   icons = {
@@ -44,3 +38,7 @@ vim.api.nvim_create_autocmd("VimEnter", {
     vim.notify("Welcome to Neovim!", "info")  -- Display greeting message
   end,
 })
+
+-- Keymaps for useful commands (optional, if you wish to map the notifications commands)
+local opts = { noremap = true, silent = true }
+vim.api.nvim_set_keymap("n", "<leader>nt", "<cmd>lua vim.notify('This is a test notification', 'info')<CR>", opts)

@@ -1,16 +1,12 @@
 " ------------------------------------
-" Neovim Configuration
-" ------------------------------------
-
 " General Settings (Load before plugins)
+" ------------------------------------
 set number                         " Enable line numbers
 set relativenumber                 " Enable relative line numbers
 set showmode                       " Display current mode
 set cursorline                     " Highlight the current line
 set cursorcolumn                   " Highlight the current column
 set termguicolors                  " Enable 24-bit RGB color in the terminal
-"set list                           " Show invisible characters (spaces, tabs)
-"set listchars=space:.,tab:->       " Define invisible characters
 set encoding=utf-8                 " Set encoding to UTF-8
 set shiftwidth=4                   " Indentation width for autoindents
 set tabstop=4                      " Number of spaces per tab
@@ -18,32 +14,22 @@ set expandtab                      " Use spaces instead of tabs
 set smartindent                    " Automatically indent new lines
 set clipboard=unnamedplus          " Enable copying to system clipboard
 set scrolloff=10                   " Start scrolling 10 lines before the end
-set laststatus=2                   " Alway show status line"
+set laststatus=2                   " Always show status line
 set nowrap                         " Disable line wrapping
-set hlsearch                       " Highlight search results
-set incsearch                      " Incremental search
-set ignorecase                     " Ignore case in searches
-set smartcase                      " Override ignorecase if search contains capital letters
 set history=10                     " Set command history limit
 set nobackup                       " Disable backup
-set shell=pwsh                     " Set the shell to PowerShell
-set shellcmdflag=-command          " Set flag for command execution in the shell
-set shellxquote=                   " Set quoting for the shell
+set incsearch                      " Incremental search
+set hlsearch                       " Highlight search results
+set ignorecase                     " Ignore case in searches
+set smartcase                      " Override ignorecase if search contains capital letters
 set splitright                     " Open new split windows to the right
 
-" Disable cursorline and cursorcolumn for specific buffers (NvimTree)
+" ------------------------------------
+" Auto Commands (Avoid Redundancy)
+" ------------------------------------
 autocmd FileType 'NvimTree' setlocal cursorline nocursorcolumn
-
-" Disable cursorline and cursorcolumn for specific buffers (Bufferline)
 autocmd FileType 'bufferline' setlocal cursorline nocursorcolumn
-
-" Ensure cursorline and cursorcolumn are disabled in other file types
 autocmd BufEnter * if &filetype != 'NvimTree' | setlocal cursorline cursorcolumn | endif
-
-
-
-" HTML tag completion
-autocmd FileType html setlocal omnifunc=htmlcomplete#CompleteTags
 
 " ------------------------------------
 " Plugin Management using vim-plug
@@ -110,7 +96,7 @@ Plug 'theHamsta/nvim-dap-virtual-text'
 Plug 'windwp/nvim-autopairs', { 'after': 'nvim-cmp' }
 
 " Motion plugins
-Plug 'folke/flash.nvim'
+Plug 'ggandor/leap.nvim'
 
 " Noice plugins
 Plug 'folke/noice.nvim'
@@ -133,7 +119,6 @@ call plug#end()
 " ------------------------------------
 " Theme Setup (Load after plugins)
 " ------------------------------------
-
 colorscheme tokyonight            " Set default colorscheme to 'tokyonight'
 
 " ------------------------------------
@@ -144,15 +129,6 @@ nnoremap <silent> <leader>bd :bp \| sp \| bn \| bd<CR>
 
 " Disable automatic comment in newline
 autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
-
-" Automatically reload init.lua after saving
-"augroup auto_reload_init
-    "autocmd!
-    "autocmd BufWritePost init.vim source <afile> | echo "init.vim reloaded!"
-"augroup END
-
-" Disable the default Tab mapping for GitHub Copilot
-let g:copilot_no_tab_map = v:true
 
 " Map Shift+Tab to accept Copilot suggestions in Insert mode
 inoremap <expr> <Right-Tab> copilot#Accept("\<CR>")
@@ -167,7 +143,9 @@ nnoremap <M-Left>  :vertical resize -1<CR>
 nnoremap <M-Down>  :resize +1<CR>
 nnoremap <M-Up>    :resize -1<CR>
 
-" Load external config files from settings directory
+" ------------------------------------
+" External Configuration Loading
+" ------------------------------------
 for file in split(glob(stdpath('config') . '/settings/*.lua'), "\n")
     exec 'source' file
 endfor

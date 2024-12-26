@@ -3,7 +3,16 @@
 local npairs = require("nvim-autopairs")
 npairs.setup({
   check_ts = true,  -- Use Treesitter for better context-aware pairing
-  fast_wrap = {},   -- Enable fast wrapping functionality with default options
+  fast_wrap = {     -- Enable fast wrapping functionality
+    map = '<M-e>',   -- Default key mapping for wrapping
+    chars = { '{', '[', '(', '"', "'" },
+    pattern = string.gsub([[ [%'%)%>%]%)%}%,] ]], '%s+', ''),
+    end_key = '$',
+    keys = 'qwertyuiopzxcvbnmasdfghjkl',
+    check_comma = true,
+    highlight = 'PmenuSel',
+    highlight_grey = 'LineNr',
+  },
 })
 
 -- nvim-autopairs integration with nvim-cmp
@@ -15,7 +24,7 @@ cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
 -- nvim-ts-autotag setup
 -- Automatically closes HTML/XML tags in supported filetypes
 require('nvim-ts-autotag').setup({
-  filetypes = { 
+  filetypes = {
     "html",                -- Standard HTML
     "javascript",          -- For JSX-like syntax
     "javascriptreact",     -- React JSX
