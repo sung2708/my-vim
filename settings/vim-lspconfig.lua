@@ -50,14 +50,13 @@ require("mason-lspconfig").setup_handlers({
     setup_lsp(server_name)
   end,
 
-  -- Custom configuration for clangd (e.g., MinGW driver setup)
+  -- Custom configuration for clangd (Ubuntu)
   ["clangd"] = function()
     setup_lsp("clangd", {
       cmd = {
-        "clangd",
+        "clangd",  -- Use clangd from PATH
         "--background-index",
-        "--header-insertion=never",
-        "--query-driver=C:/Program Files/mingw64/bin/*"
+        "--header-insertion=never"
       },
     })
   end,

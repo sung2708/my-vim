@@ -53,7 +53,7 @@ require("bufferline").setup {
         show_buffer_icons = true,
         show_buffer_close_icons = true,
         show_tab_indicators = true,
-        separator_style = "padded_slope",
+        separator_style = "slant",
         always_show_bufferline = true,
         hover = { enabled = true, delay = 200, reveal = {'close'} },
         sort_by = 'insert_after_current',

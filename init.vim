@@ -119,7 +119,7 @@ call plug#end()
 " ------------------------------------
 " Theme Setup (Load after plugins)
 " ------------------------------------
-colorscheme tokyonight            " Set default colorscheme to 'tokyonight'
+colorscheme poimandres            " Set default colorscheme to 'poimandres'
 
 " ------------------------------------
 " Key Mappings and Other Settings

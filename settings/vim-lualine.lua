@@ -2,7 +2,7 @@
 require('lualine').setup({
   options = {
     icons_enabled = true,                 -- Enable icons
-    theme = 'tokyonight',                 -- Theme for lualine
+    theme = 'poimandres',                 -- Theme for lualine
     component_separators = { left = '', right = '' },  -- Separators for components
     section_separators = { left = '', right = '' },    -- Separators for sections
     disabled_filetypes = { statusline = {}, winbar = {} },  -- Disable for specific filetypes
