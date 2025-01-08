@@ -1,8 +1,6 @@
--- Initialize Mason and Mason-LSPConfig for automatic LSP server installation
+-- Initialize Mason and Mason-LSPConfig for managing LSP servers
 require("mason").setup()
-require("mason-lspconfig").setup({
-  ensure_installed = { "clangd", "pyright", "bashls", "gopls", "html", "cssls", "lua_ls", "emmet_ls" },
-})
+require("mason-lspconfig").setup()
 
 -- Import necessary modules for LSP configuration
 local lspconfig = require('lspconfig')
@@ -12,17 +10,17 @@ local cmp_nvim_lsp = require('cmp_nvim_lsp')
 local function on_attach(client, bufnr)
   local opts = { noremap = true, silent = true }
   local keymaps = {
-    { 'n', 'gd', vim.lsp.buf.definition, opts },        -- Go to definition
-    { 'n', 'K', vim.lsp.buf.hover, opts },              -- Hover for documentation
-    { 'n', 'gi', vim.lsp.buf.implementation, opts },    -- Go to implementation
-    { 'n', 'gr', vim.lsp.buf.references, opts },        -- Find references
-    { 'n', '<leader>rn', vim.lsp.buf.rename, opts },    -- Rename symbol
-    { 'n', '<leader>ca', vim.lsp.buf.code_action, opts } -- Show code actions
+    { 'n', 'gd', vim.lsp.buf.definition },        -- Go to definition
+    { 'n', 'K', vim.lsp.buf.hover },              -- Hover for documentation
+    { 'n', 'gi', vim.lsp.buf.implementation },    -- Go to implementation
+    { 'n', 'gr', vim.lsp.buf.references },        -- Find references
+    { 'n', '<leader>rn', vim.lsp.buf.rename },    -- Rename symbol
+    { 'n', '<leader>ca', vim.lsp.buf.code_action } -- Show code actions
   }
 
   -- Set key mappings for each LSP action
   for _, map in ipairs(keymaps) do
-    vim.api.nvim_buf_set_keymap(bufnr, map[1], map[2], map[3], map[4])
+    vim.api.nvim_buf_set_keymap(bufnr, map[1], map[2], string.format(":lua %s()<CR>", map[3]), opts)
   end
 end
 
@@ -50,32 +48,14 @@ require("mason-lspconfig").setup_handlers({
     setup_lsp(server_name)
   end,
 
-  -- Custom configuration for clangd (Ubuntu)
-  ["clangd"] = function()
-    setup_lsp("clangd", {
-      cmd = {
-        "clangd",  -- Use clangd from PATH
-        "--background-index",
-        "--header-insertion=never"
-      },
-    })
-  end,
-
-  -- Specific configuration for pyright
-  ["pyright"] = function()
-    setup_lsp("pyright")
-  end,
-})
-
--- Configure Emmet LSP for web development languages
-lspconfig.emmet_ls.setup({
-  capabilities = capabilities,
-  filetypes = { "css", "html", "javascript", "typescript", "vue", "scss", "less", "sass", "ejs", "pug", "eruby", "hbs" },
-  init_options = {
-    html = {
-      options = {
-        ["bem.enabled"] = true,  -- Enable BEM (Block Element Modifier) CSS naming support
-      },
-    },
+  -- Custom configuration for clangd (C++ files)
+require('lspconfig').clangd.setup({
+  cmd = {
+    "clangd",  -- Ensure clangd is in your PATH
+    "--background-index",
+    "--header-insertion=never"
   },
+  on_attach = on_attach,
+  capabilities = capabilities,
+})
 })
