@@ -119,7 +119,7 @@ call plug#end()
 " ------------------------------------
 " Theme Setup (Load after plugins)
 " ------------------------------------
-colorscheme poimandres            " Set default colorscheme to 'poimandres'
+colorscheme catppuccin            " Set default colorscheme to 'catppuccin'
 
 " ------------------------------------
 " Key Mappings and Other Settings

@@ -10,17 +10,28 @@ local cmp_nvim_lsp = require('cmp_nvim_lsp')
 local function on_attach(client, bufnr)
   local opts = { noremap = true, silent = true }
   local keymaps = {
-    { 'n', 'gd', vim.lsp.buf.definition },        -- Go to definition
-    { 'n', 'K', vim.lsp.buf.hover },              -- Hover for documentation
-    { 'n', 'gi', vim.lsp.buf.implementation },    -- Go to implementation
-    { 'n', 'gr', vim.lsp.buf.references },        -- Find references
-    { 'n', '<leader>rn', vim.lsp.buf.rename },    -- Rename symbol
-    { 'n', '<leader>ca', vim.lsp.buf.code_action } -- Show code actions
+    { 'n', 'gd', 'vim.lsp.buf.definition' },        -- Go to definition
+    { 'n', 'K', 'vim.lsp.buf.hover' },              -- Hover for documentation
+    { 'n', 'gi', 'vim.lsp.buf.implementation' },    -- Go to implementation
+    { 'n', 'gr', 'vim.lsp.buf.references' },        -- Find references
+    { 'n', '<leader>rn', 'vim.lsp.buf.rename' },    -- Rename symbol
+    { 'n', '<leader>ca', 'vim.lsp.buf.code_action' }, -- Show code actions
+    { 'n', '<leader>pd', 'vim.lsp.buf.declaration' }, -- Show declaration
   }
 
   -- Set key mappings for each LSP action
   for _, map in ipairs(keymaps) do
-    vim.api.nvim_buf_set_keymap(bufnr, map[1], map[2], string.format(":lua %s()<CR>", map[3]), opts)
+    -- Ensure we're passing the function name as a string
+    vim.api.nvim_buf_set_keymap(bufnr, map[1], map[2], ":lua " .. map[3] .. "()<CR>", opts)
+  end
+
+  -- Highlight all references when definition is jumped to
+  if client.server_capabilities.document_highlight then
+    -- Highlight the references under the cursor
+    vim.api.nvim_command('autocmd CursorHold <buffer> lua vim.lsp.buf.document_highlight()')
+    vim.api.nvim_command('autocmd CursorHoldI <buffer> lua vim.lsp.buf.document_highlight()')
+    -- Clear the references when the cursor is moved away
+    vim.api.nvim_command('autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()')
   end
 end
 
@@ -49,13 +60,31 @@ require("mason-lspconfig").setup_handlers({
   end,
 
   -- Custom configuration for clangd (C++ files)
-require('lspconfig').clangd.setup({
-  cmd = {
-    "clangd",  -- Ensure clangd is in your PATH
-    "--background-index",
-    "--header-insertion=never"
-  },
-  on_attach = on_attach,
-  capabilities = capabilities,
+  ["clangd"] = function()
+    lspconfig.clangd.setup({
+      cmd = {
+        "clangd",  -- Ensure clangd is in your PATH
+        "--background-index",
+        "--header-insertion=never"
+      },
+      on_attach = on_attach,
+      capabilities = capabilities,
+    })
+  end,
+
+  -- Custom configuration for typescript-language-server (ts_ls) for JavaScript/TypeScript files
+  ["typescript-language-server"] = function()
+    lspconfig.tsserver.setup({
+      cmd = {
+        "typescript-language-server", "--protocol", "stdio"  -- Ensure typescript-language-server is in your PATH
+      },
+      on_attach = on_attach,
+      capabilities = capabilities,
+    })
+  end,
 })
-})
+
+-- Custom key mapping for hovering, definition, and declaration
+vim.api.nvim_set_keymap('n', 'gd', ":lua vim.lsp.buf.definition()<CR>", { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', 'K', ":lua vim.lsp.buf.hover()<CR>", { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<leader>pd', ":lua vim.lsp.buf.declaration()<CR>", { noremap = true, silent = true })
