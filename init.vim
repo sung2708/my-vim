@@ -1,3 +1,10 @@
+"███████╗██╗   ██╗███╗   ██╗ ██████╗ ██████╗ "
+"██╔════╝██║   ██║████╗  ██║██╔════╝ ██╔══██╗"
+"███████╗██║   ██║██╔██╗ ██║██║  ███╗██████╔╝"
+"╚════██║██║   ██║██║╚██╗██║██║   ██║██╔═══╝ "
+"███████║╚██████╔╝██║ ╚████║╚██████╔╝██║     "
+"╚══════╝ ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝ ╚═╝     "
+
 " ------------------------------------
 " General Settings (Load before plugins)
 " ------------------------------------
@@ -23,14 +30,25 @@ set hlsearch                       " Highlight search results
 set ignorecase                     " Ignore case in searches
 set smartcase                      " Override ignorecase if search contains capital letters
 set splitright                     " Open new split windows to the right
+set nocompatible                   " Disable compatibility mode
+syntax on                          " Enable syntax highlighting
+filetype indent on                 " Enable file type-specific indenting
+filetype plugin on                 " Enable file type-specific plugins
+filetype on                        " Enable file type detection
 
 " ------------------------------------
 " Auto Commands (Avoid Redundancy)
 " ------------------------------------
-autocmd FileType 'NvimTree' setlocal cursorline nocursorcolumn
-autocmd FileType 'bufferline' setlocal cursorline nocursorcolumn
-autocmd FileType 'dashboard' setlocal nocursorline nocursorcolumn  " Disable cursorline/column in dashboard
+autocmd FileType 'NvimTree' setlocal cursorline nocursorcolumn " Adjust cursor behavior in NvimTree
+autocmd FileType 'bufferline' setlocal cursorline nocursorcolumn " Adjust cursor behavior in bufferline
+autocmd FileType 'dashboard' setlocal nocursorline nocursorcolumn " Disable cursorline/column in dashboard
 autocmd BufEnter * if &filetype != 'NvimTree' && &filetype != 'dashboard' | setlocal cursorline cursorcolumn | endif
+
+" Vim jump to the last position when reopening a file
+if has("autocmd")
+  au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
+    \| exe "normal! g'\"" | endif
+endif
 
 " ------------------------------------
 " Plugin Management using vim-plug
@@ -48,6 +66,8 @@ Plug 'sainnhe/sonokai'
 Plug 'kaiuri/nvim-juliana'
 Plug 'olivercederborg/poimandres.nvim'
 Plug 'EdenEast/nightfox.nvim'
+Plug 'morhetz/gruvbox'
+Plug 'echasnovski/mini.icons'
 
 " File explorer and related plugins
 Plug 'nvim-tree/nvim-tree.lua'
@@ -118,6 +138,13 @@ Plug 'stevearc/conform.nvim'
 " Dashboard
 Plug 'nvimdev/dashboard-nvim'
 
+" Go-vim
+Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+Plug 'charlespascoe/vim-go-syntax'
+
+" Which Key
+Plug 'folke/which-key.nvim'
+
 call plug#end()
 
 " ------------------------------------
@@ -146,6 +173,42 @@ nnoremap <M-Right> :vertical resize +1<CR>
 nnoremap <M-Left>  :vertical resize -1<CR>
 nnoremap <M-Down>  :resize +1<CR>
 nnoremap <M-Up>    :resize -1<CR>
+
+" Move line or visually selected block - Alt+j/k
+inoremap <A-j> <Esc>:m .+1<CR>==gi
+inoremap <A-k> <Esc>:m .-2<CR>==gi
+vnoremap <A-j> :m '>+1<CR>gv=gv
+vnoremap <A-k> :m '<-2<CR>gv=gv
+
+" Move split panes to left/bottom/top/right
+nnoremap <A-h> <C-W>H
+nnoremap <A-j> <C-W>J
+nnoremap <A-k> <C-W>K
+nnoremap <A-l> <C-W>L
+
+" Move between panes to left/bottom/top/right
+nnoremap <C-h> <C-w>h
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-l> <C-w>l
+
+" Open file in a text by placing text and gf
+nnoremap gf :vert winc f<CR>
+
+" Copies file path to clipboard by pressing yf
+nnoremap <silent> yf :let @+=expand('%:p')<CR>
+
+" Copies current working directory to clipboard
+nnoremap <silent> yd :let @+=expand('%:p:h')<CR>
+
+" Press 'ii' to exit Insert mode
+inoremap ii <Esc>
+inoremap jk <Esc>
+inoremap kj <Esc>
+
+" Use 'jk' or 'kj' in Visual mode to exit
+vnoremap jk <Esc>
+vnoremap kj <Esc>
 
 " ------------------------------------
 " External Configuration Loading
