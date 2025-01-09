@@ -11,77 +11,98 @@ function _G.ToggleTheme()
   vim.cmd("colorscheme onedark") -- Default theme
 end
 
--- Load dashboard settings
+-- Helper to count plugins and generate footer
+local function generate_footer()
+  -- Determine plugin directory based on OS
+  local plug_dir
+  if vim.fn.has("win32") == 1 or vim.fn.has("win64") == 1 then
+    plug_dir = vim.fn.expand("~/AppData/Local/nvim/plugged")
+  else
+    plug_dir = vim.fn.stdpath("config") .. "/plugged"
+  end
+
+  -- Count plugins
+  local plugin_count = 0
+  if vim.fn.isdirectory(plug_dir) == 1 then
+    plugin_count = vim.fn.len(vim.fn.glob(plug_dir .. "/*", 0, 1))
+  else
+    vim.notify("Plugin directory not found: " .. plug_dir, vim.log.levels.WARN)
+  end
+
+  -- System info
+  local system_info = string.format(
+    "Neovim v%s | %s | Plugins loaded: %d",
+    vim.version().major .. '.' .. vim.version().minor,
+    os.date("%Y-%m-%d"),
+    plugin_count
+  )
+
+  -- Quotes
+  local quotes = {
+    "Code is like humor. When you have to explain it, it’s bad.",
+    "Fix the cause, not the symptom.",
+    "Simplicity is the soul of efficiency.",
+    "Sharp tools make good work.",
+  }
+  local random_quote = quotes[math.random(#quotes)]
+
+  return { system_info, random_quote }
+end
+
+-- Dashboard configuration
 local ok, dashboard = pcall(require, "dashboard")
 if not ok then
   vim.notify("Failed to load dashboard-nvim", vim.log.levels.ERROR)
   return
 end
 
--- Define the sections for the dashboard
-local section = {
-  header = {
-    "                                             ",
-    "                                             ",
-    "                                             ",
-    "                                             ",
-    "                                             ",
-    "                                             ",
-    "                                             ",
-    "                                             ",
-    "███████╗██╗   ██╗███╗   ██╗ ██████╗ ██████╗ ",
-    "██╔════╝██║   ██║████╗  ██║██╔════╝ ██╔══██╗",
-    "███████╗██║   ██║██╔██╗ ██║██║  ███╗██████╔╝",
-    "╚════██║██║   ██║██║╚██╗██║██║   ██║██╔═══╝ ",
-    "███████║╚██████╔╝██║ ╚████║╚██████╔╝██║     ",
-    "╚══════╝ ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝ ╚═╝     ",
-    "                                             ",
-    "         Welcome to SUNGP!          ",
-    "                                             ",
-  },
-  buttons = {
-    { icon = '  ', desc = 'Find File        ', key = 'f', action = 'Telescope find_files' },
-    { icon = '󱦺  ', desc = 'Recent Files     ', key = 'r', action = 'Telescope oldfiles' },
-    { icon = '󰩉  ', desc = 'Find Word        ', key = 'w', action = 'Telescope live_grep' },
-    { icon = '  ', desc = 'Open Terminal    ', key = 't', action = 'FloatermNew' },
-    { icon = '  ', desc = 'Find in Files    ', key = 's', action = 'Telescope grep_string' },
-    { icon = '  ', desc = 'Open Project     ', key = 'p', action = 'Telescope project' },
-    { icon = '  ', desc = 'Toggle Theme     ', key = 'c', action = 'lua ToggleTheme()' },
-    { icon = '󰈙  ', desc = 'Show Docs        ', key = 'd', action = 'Telescope help_tags' },
-  },
-  footer = function()
-    local system_info = string.format("Neovim v%s | %s", vim.version().major .. '.' .. vim.version().minor, os.date("%Y-%m-%d"))
-    local quotes = {
-      "Code is like humor. When you have to explain it, it’s bad.",
-      "Fix the cause, not the symptom.",
-      "Simplicity is the soul of efficiency.",
-      "Sharp tools make good work.",
-    }
-    return { system_info, quotes[math.random(#quotes)] }
-  end,
-}
-
--- Configure the dashboard
 dashboard.setup({
   theme = 'doom',
   config = {
-    header = section.header,
-    center = section.buttons,
-    footer = section.footer,
+    header = {
+      "                                             ",
+      "                                             ",
+      "                                             ",
+      "                                             ",
+      "                                             ",
+      "                                             ",
+      "                                             ",
+      "                                             ",
+      "                                             ",
+      "███████╗██╗   ██╗███╗   ██╗ ██████╗ ██████╗ ",
+      "██╔════╝██║   ██║████╗  ██║██╔════╝ ██╔══██╗",
+      "███████╗██║   ██║██╔██╗ ██║██║  ███╗██████╔╝",
+      "╚════██║██║   ██║██║╚██╗██║██║   ██║██╔═══╝ ",
+      "███████║╚██████╔╝██║ ╚████║╚██████╔╝██║     ",
+      "╚══════╝ ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝ ╚═╝     ",
+      "                                             ",
+      "         Welcome to SUNGP!          ",
+      "                                             ",
+    },
+    center = {
+      { icon = '  ', desc = 'Find File        ', key = 'f', action = 'Telescope find_files' },
+      { icon = '󱦺  ', desc = 'Recent Files     ', key = 'r', action = 'Telescope oldfiles' },
+      { icon = '󰩉  ', desc = 'Find Word        ', key = 'w', action = 'Telescope live_grep' },
+      { icon = '  ', desc = 'Open Terminal    ', key = 't', action = 'FloatermNew' },
+      { icon = '  ', desc = 'Find in Files    ', key = 's', action = 'Telescope grep_string' },
+      { icon = '  ', desc = 'Open Project     ', key = 'p', action = 'Telescope project' },
+      { icon = '  ', desc = 'Toggle Theme     ', key = 'c', action = 'lua ToggleTheme()' },
+      { icon = '󰈙  ', desc = 'Show Docs        ', key = 'd', action = 'Telescope help_tags' },
+    },
+    footer = generate_footer,
   },
-  header_pad = 7,   -- Increase top margin to center header
-  center_pad = 3,   -- Space between header and buttons
-  footer_pad = 2,   -- Space between buttons and footer
-  width = 60,       -- Reduce width to center align
-  height = 20,      -- Decrease height to keep content in the center
-  center_align = true, -- Align sections to center
+  header_pad = 7,
+  center_pad = 3,
+  footer_pad = 2,
+  width = 60,
+  height = 20,
+  center_align = true,
 })
 
--- Autocmd to handle startup behavior
+-- Autocmd for startup behavior
 vim.api.nvim_create_autocmd("VimEnter", {
   callback = function()
-    local args = vim.fn.argv()
-    if #args == 0 then
+    if #vim.fn.argv() == 0 then
       vim.cmd("Dashboard")
     end
   end,
