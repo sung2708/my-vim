@@ -71,17 +71,6 @@ require("mason-lspconfig").setup_handlers({
       capabilities = capabilities,
     })
   end,
-
-  -- Custom configuration for typescript-language-server (ts_ls) for JavaScript/TypeScript files
-  ["typescript-language-server"] = function()
-    lspconfig.tsserver.setup({
-      cmd = {
-        "typescript-language-server", "--protocol", "stdio"  -- Ensure typescript-language-server is in your PATH
-      },
-      on_attach = on_attach,
-      capabilities = capabilities,
-    })
-  end,
 })
 
 -- Custom key mapping for hovering, definition, and declaration

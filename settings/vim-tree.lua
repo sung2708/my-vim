@@ -34,15 +34,36 @@ require('nvim-tree').setup({
   end,
 })
 
--- Open nvim-tree on startup
+-- Autocmd to handle startup behavior
+-- Autocmd to handle startup behavior
 vim.api.nvim_create_autocmd("VimEnter", {
   callback = function()
-    local ok, api = pcall(require, "nvim-tree.api")
-    if ok then
-      api.tree.open()
-      if #vim.fn.argv() > 0 or vim.fn.has("stdin") == 1 then vim.cmd("wincmd p") end
+    local args = vim.fn.argv()
+    local api = require("nvim-tree.api")
+
+    if #args == 0 then
+      -- No arguments (no files): Open dashboard
+      local ok, dashboard = pcall(require, "dashboard")
+      if ok then
+        dashboard.setup({
+          -- Dashboard-specific settings (customize as needed)
+          theme = 'hyper',
+          config = {
+            header = {
+              "Welcome to Neovim!",
+              "Configure your workflow 🚀"
+            },
+            -- Add more sections or buttons as needed
+          },
+        })
+        vim.cmd("Dashboard")  -- Open the dashboard
+      else
+        vim.notify("Failed to load dashboard-nvim", vim.log.levels.ERROR)
+      end
     else
-      vim.notify("Failed to load nvim-tree", vim.log.levels.ERROR)
+      -- Arguments (files) provided: Open nvim-tree
+      api.tree.open()  -- Open the file tree
+      vim.cmd("wincmd p")  -- Focus the previous window (to switch to nvim-tree)
     end
   end,
 })

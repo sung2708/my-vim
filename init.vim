@@ -29,7 +29,8 @@ set splitright                     " Open new split windows to the right
 " ------------------------------------
 autocmd FileType 'NvimTree' setlocal cursorline nocursorcolumn
 autocmd FileType 'bufferline' setlocal cursorline nocursorcolumn
-autocmd BufEnter * if &filetype != 'NvimTree' | setlocal cursorline cursorcolumn | endif
+autocmd FileType 'dashboard' setlocal nocursorline nocursorcolumn  " Disable cursorline/column in dashboard
+autocmd BufEnter * if &filetype != 'NvimTree' && &filetype != 'dashboard' | setlocal cursorline cursorcolumn | endif
 
 " ------------------------------------
 " Plugin Management using vim-plug
@@ -113,6 +114,9 @@ Plug 'windwp/nvim-ts-autotag'
 
 " Formatter
 Plug 'stevearc/conform.nvim'
+
+" Dashboard
+Plug 'nvimdev/dashboard-nvim'
 
 call plug#end()
 
